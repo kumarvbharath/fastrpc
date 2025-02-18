@@ -121,21 +121,18 @@ extern "C" {
 #define MDSP_DOMAIN_ID    1
 #define SDSP_DOMAIN_ID    2
 #define CDSP_DOMAIN_ID    3
-#define CDSP1_DOMAIN_ID   4
 
 /** Supported Domain Names */
 #define ADSP_DOMAIN_NAME "adsp"
 #define MDSP_DOMAIN_NAME "mdsp"
 #define SDSP_DOMAIN_NAME "sdsp"
 #define CDSP_DOMAIN_NAME "cdsp"
-#define CDSP1_DOMAIN_NAME "cdsp1"
 
 /** Defines to prepare URI for multi-domain calls */
 #define ADSP_DOMAIN "&_dom=adsp"
 #define MDSP_DOMAIN "&_dom=mdsp"
 #define SDSP_DOMAIN "&_dom=sdsp"
 #define CDSP_DOMAIN "&_dom=cdsp"
-#define CDSP1_DOMAIN "&_dom=cdsp1"
 
 /** Internal transport prefix */
 #define ITRANSPORT_PREFIX "'\":;./\\"
@@ -309,7 +306,6 @@ enum remote_dsp_attributes {
     HMX_SUPPORT_SPATIAL,          /** HMX Support Spatial */
     ASYNC_FASTRPC_SUPPORT,        /** Async FastRPC Support */
     STATUS_NOTIFICATION_SUPPORT , /** DSP User PD status notification Support */
-    MCID_MULTICAST,               /** Multicast widget programming */
     /** Update FASTRPC_MAX_DSP_ATTRIBUTES when adding new value to this enum */
 };
 
@@ -561,38 +557,6 @@ typedef struct remote_rpc_get_uri {
     uint32_t uri_len;                      /** @param[in]: URI length */
 } remote_rpc_get_uri_t;
 
-/* struct to be used with FASTRPC_CONTEXT_CREATE request ID */
-typedef struct fastrpc_context_create {
-	/*
-	 * [in]: List of effective domain IDs on which session needs to be
-	 * created. Needs to be allocated and populated by user.
-	 *
-	 * A new effective domain id CANNOT be added to an existing context.
-	 */
-	uint32_t *effec_domain_ids;
-
-	/*
-	 * [in]: Number of domain ids.
-	 * Size of effective domain ID array.
-	 */
-	uint32_t num_domain_ids;
-
-	/* [in]: Type of create request (unused) */
-	uint64_t flags;
-
-	/* [out]: Multi-domain context handle */
-	uint64_t ctx;
-} fastrpc_context_create;
-
-/* struct to be used with FASTRPC_CONTEXT_DESTROY request ID */
-typedef struct fastrpc_context_destroy {
-	/* [in]: Fastrpc multi-domain context */
-	uint64_t ctx;
-
-	/* [in]: Type of destroy request (unused) */
-	uint64_t flags;
-} fastrpc_context_destroy;
-
 /**
  * Request IDs for remote session control interface
  **/
@@ -612,10 +576,7 @@ enum session_control_req_id {
     FASTRPC_PD_INITMEM_SIZE,                   /** Set signed userpd initial memory size  **/
     FASTRPC_RESERVE_NEW_SESSION,               /** Reserve new FastRPC session **/
     FASTRPC_GET_EFFECTIVE_DOMAIN_ID,           /** Get effective domain ID of a FastRPC session */
-    FASTRPC_GET_URI,                           /** Creates the URI needed to load a module in the DSP User PD */
-    FASTRPC_MAX_THREAD_PARAM,                  /** Set max thread value for unsigned PD */
-    FASTRPC_CONTEXT_CREATE,                    /** Create or attaches to remote session(s) on one or more domains */
-    FASTRPC_CONTEXT_DESTROY,                   /** Destroy or detach from remote sessions */
+    FASTRPC_GET_URI                            /** Creates the URI needed to load a module in the DSP User PD */
 };
 
 
