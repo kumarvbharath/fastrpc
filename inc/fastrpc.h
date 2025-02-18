@@ -14,6 +14,7 @@
 #include "error.h"
 #include "log.h"
 #include "rpcmem.h"
+#include "config.h"
 #include "remote.h"
 #include "uthash.h"
 
@@ -73,6 +74,7 @@ struct session {
     int session_id;
     int active_users;
     struct dsp *dsp;
+    config_store_t *config;
     pthread_spinlock_t lock;
     QList modules;
     QList maps;
@@ -84,6 +86,7 @@ struct dsp {
     int active_dsp; // Add this line
     QList sessions;
     QList session_callbacks;
+    config_store_t *config;
     pthread_mutex_t dsp_lock;
     QNode n;
 };

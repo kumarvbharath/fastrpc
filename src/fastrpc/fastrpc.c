@@ -506,6 +506,13 @@ struct session *session_init(struct dsp *dsp, int session_id)
     sess->session_id = session_id;
     sess->active_users = 0;
     sess->dsp = dsp;
+    sess->config = config_store_create();
+    if (!sess->config) {
+        unlock_dsp(dsp);
+        free(sess);
+        LOG_SESS_INIT_ERR("Failed to create config store for session ID %d", session_id);
+        return NULL;
+    }
     QList_Ctor(&sess->maps);
 
     /* Initialize session lock */
@@ -606,6 +613,7 @@ int session_deinit(struct session *sess)
             return AEE_EFAILED;
         }
 
+        config_store_destroy(sess->config);
         // Cleanup session
         QNode_Dequeue(&sess->n);
         pthread_spin_destroy(&sess->lock);
@@ -705,29 +713,37 @@ void session_remove_module(struct session *sess, remote_handle64 handle)
 /* Configure Session */
 int session_configure(struct session *sess, char* config_key, void *config_value)
 {
-    struct dsp *dsp = NULL; // Assume you have a way to get the DSP from the session
+    struct dsp *dsp = NULL;
 
-    (void)config_value;
+    if (!config_key || !config_value) {
+        LOG_ERR("Invalid config key or value");
+        return AEE_EINVALIDPARAM;
+    }
     if (!sess) {
         LOG_ERR("Invalid session pointer");
         return AEE_EINVALIDPARAM;
     }
 
-    if(validate_session(sess) != AEE_SUCCESS) {
+    if (validate_session(sess) != AEE_SUCCESS) {
         LOG_ERR("Invalid session pointer");
         return AEE_EINVALIDPARAM;
     }
 
     dsp = sess->dsp;
 
+    // Check return value from config_store_set
+    int err = config_store_set(sess->config, config_key, config_value);
+    if (err != AEE_SUCCESS) {
+        LOG_ERR("Failed to set config value for key %s", config_key);
+        return err;
+    }
+
     /* Call registered session callbacks for configure */
-    int err = call_session_callbacks(dsp, CALLBACK_TYPE_CONFIGURE, sess);
-    if(err) {
+    err = call_session_callbacks(dsp, CALLBACK_TYPE_CONFIGURE, sess->config);
+    if (err) {
         LOG_ERR("Failed to configure session ID %d with config key %s", sess->session_id, config_key);
         return AEE_EFAILED;
     }
-
-    // Add your configuration logic here
 
     LOG_INF("Configured session ID %d with config key %s", sess->session_id, config_key);
     return AEE_SUCCESS;

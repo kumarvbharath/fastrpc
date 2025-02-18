@@ -32,13 +32,19 @@ void *test_session_callback_invoke(int type, void *ctx, void *invoke, int *err)
     return NULL;
 }
 
-void *test_session_callback_configure(int type, void *ctx, void *sess, int *err)
+void *test_session_callback_configure(int type, void *ctx, void *data, int *err)
 {
     if (type == CALLBACK_TYPE_CONFIGURE) {
-        callback_invoked_configure++;
-        *err = AEE_SUCCESS;
+        config_store_t *store = (config_store_t *)data;
+        // Test getting a config value
+        void *value = config_store_get(store, "test_key");
+        if (value) {
+            callback_invoked_configure++;
+            *err = AEE_SUCCESS;
+        } else {
+            *err = AEE_EFAILED;
+        }
     }
-    return NULL;
 }
 
 int test_dsp_init(void)
@@ -103,8 +109,9 @@ int test_session_configure(void)
     register_session_callback(dsp, CALLBACK_TYPE_INIT, test_session_callback);
     register_session_callback(dsp, CALLBACK_TYPE_CONFIGURE, test_session_callback_configure);
 
+    void *value = malloc(sizeof(int));
     struct session *sess = session_init(dsp, 1);
-    int result = session_configure(sess, 1, NULL);
+    int result = session_configure(sess, "test_key", value);
     ASSERT_EQUAL(result, AEE_SUCCESS);
     ASSERT_TRUE(callback_invoked_configure > 0);
     session_deinit(sess);
@@ -114,7 +121,7 @@ int test_session_configure(void)
 
 int test_session_configure_null(void)
 {
-    int result = session_configure(NULL, 1, NULL);
+    int result = session_configure(NULL, "test_key", NULL);
     ASSERT_EQUAL(result, AEE_EINVALIDPARAM);
     return 0;
 }
@@ -309,6 +316,36 @@ int test_multithreading_multiple_dsp_session(void)
     return 0;
 }
 
+static int test_session_config(void) {
+    struct dsp *dsp = dsp_init(1);
+    ASSERT_NOT_NULL(dsp);
+
+    register_session_callback(dsp, CALLBACK_TYPE_INIT, test_session_callback);
+    struct session *sess = session_init(dsp, 1);
+    ASSERT_NOT_NULL(sess);
+
+    // Test configuration
+    int *value = malloc(sizeof(int));
+    *value = 42;
+    ASSERT_EQUAL(session_configure(sess, "test_key", value), AEE_SUCCESS);
+
+    // Verify config value
+    void *retrieved = config_store_get(sess->config, "test_key");
+    ASSERT_NOT_NULL(retrieved);
+    ASSERT_EQUAL(*(int*)retrieved, 42);
+
+    // Test invalid config
+    ASSERT_NOT_EQUAL(session_configure(sess, NULL, value), AEE_SUCCESS);
+    ASSERT_NOT_EQUAL(session_configure(sess, "test_key", NULL), AEE_SUCCESS);
+
+    // Cleanup
+    //value cleaned up in config_store_destroy
+    ASSERT_EQUAL(session_deinit(sess), AEE_SUCCESS);
+    ASSERT_EQUAL(dsp_deinit(1), AEE_SUCCESS);
+    
+    return 0;
+}
+
 int main()
 {
     fastrpc_init();
@@ -331,6 +368,7 @@ int main()
     RUN_TEST(test_multithreading_init_deinit_50);
     RUN_TEST(test_multiple_dsp_session_init_deinit);
     RUN_TEST(test_multithreading_multiple_dsp_session);
+    RUN_TEST(test_session_config);
 
     printf("All tests passed.\n");
     return 0;
