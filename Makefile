@@ -13,6 +13,10 @@ LIB_DIR = lib
 FASTRPC_SRC = $(wildcard $(SRC_DIR)/fastrpc/*.c)
 SRC_FILES = $(FASTRPC_SRC)
 
+# Remote files
+REMOTE_SRC = $(wildcard $(SRC_DIR)/remote/*.c)
+SRC_FILES += $(REMOTE_SRC)
+
 # Test files
 TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
 
@@ -37,6 +41,11 @@ $(LIB_TARGET): $(OBJ_FILES)
 # Object files for fastrpc
 $(OBJ_DIR)/fastrpc/%.o: $(SRC_DIR)/fastrpc/%.c
 	@mkdir -p $(OBJ_DIR)/fastrpc
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Object files for remote
+$(OBJ_DIR)/remote/%.o: $(SRC_DIR)/remote/%.c
+	@mkdir -p $(OBJ_DIR)/remote
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Object files for tests

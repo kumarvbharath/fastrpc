@@ -18,6 +18,10 @@
 #include "remote.h"
 #include "uthash.h"
 
+#define MAKE_EXTENDED_DOMAIN_ID(domain, session) ((domain << 16) | session)
+#define GET_DOMAIN_ID(domain) (domain >> 16)
+#define GET_SESSION_ID(domain) (domain & 0xFFFF)
+
 /**
  * FastRPC Callback Types 
  * These callbacks are triggered at different stages of the FastRPC session lifecycle
