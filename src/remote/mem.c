@@ -65,10 +65,11 @@ void destroy_rpcmem(struct rpcmem *mem) {
 
 int fastrpc_mmap(int domain, int fd, void *addr, int offset, size_t length, enum fastrpc_map_flags flags) {
     fastrpc_init();
-    LOG_INF("Called fastrpc_mmap with domain: %d, fd: %d, addr: %p, offset: %d, length: %zu, flags: %d", domain, fd, addr, offset, length, flags);
 
     int dom_id = GET_DOMAIN_ID(domain);
     int sess_id = GET_SESSION_ID(domain);
+
+    LOG_INF("Called fastrpc_mmap with domain: %d, session %d fd: %d, addr: %p, offset: %d, length: %zu, flags: %d", domain, sess_id, fd, addr, offset, length, flags);
 
     struct dsp *dsp = dsp_init(dom_id);
     if (!dsp) {
@@ -90,17 +91,17 @@ int fastrpc_mmap(int domain, int fd, void *addr, int offset, size_t length, enum
     mem.offset = offset;
     mem.attr = flags;
 
-    int result = session_map_memory(sess, &mem);
-    if (result != AEE_SUCCESS) {
-        LOG_ERR("Failed to map memory for domain: %d, fd: %d, addr: %p, offset: %d, length: %zu, flags: %d", dom_id, fd, addr, offset, length, flags);
+    void *ptr = session_map_memory(sess, &mem);
+    if (!ptr) {
+        LOG_ERR("Failed to map memory for domain: %d, sess id: %d fd: %d, addr: %p, offset: %d, length: %zu, flags: %d", dom_id, sess_id, fd, addr, offset, length, flags);
         session_deinit(sess);
         dsp_deinit(dom_id);
-        return result;
+        return AEE_EINVALIDPARAM;
     }
 
     put_session(sess);
     
-    LOG_INF("Successfully mapped memory for domain: %d, fd: %d, addr: %p, offset: %d, length: %zu, flags: %d", dom_id, fd, addr, offset, length, flags);
+    LOG_INF("Successfully mapped memory for domain: %d, sess id: %d fd: %d, addr: %p, offset: %d, length: %zu, flags: %d", dom_id, sess_id, fd, addr, offset, length, flags);
     return AEE_SUCCESS;
 }
 
