@@ -95,10 +95,18 @@ struct dsp {
     QNode n;
 };
 
+struct remote_args {
+    void *pv;
+    size_t nLen;
+    int fd;
+    uint32_t offset;
+    uint32_t attrs;
+};
+
 struct invoke_params {
     remote_handle64 handle;
     uint32_t sc;
-    remote_arg64 *args;
+    struct remote_args *args;
 };
 
 /**
@@ -229,7 +237,7 @@ struct invoke_params {
   * @thread_safety Thread-safe through session validation
   * @note All memory referenced in params must be pre-mapped using session_map_memory
   */
- int session_invoke(struct session *sess, remote_handle64 handle, uint32_t sc, remote_arg64 *params);
+ int session_invoke(struct session *sess, remote_handle64 handle, uint32_t sc, remote_arg *params);
  
  /**
   * @brief Map memory for use with RPC calls

@@ -242,32 +242,39 @@ static int validate_session(struct session *sess)
         return AEE_EINVALIDPARAM;
     }
 
-//    LOG_INF("Session ID %d is valid for DSP ID %d", sess->session_id, dsp->dsp_id);
+    LOG_INF("Session ID %d is valid for DSP ID %d", sess->session_id, dsp->dsp_id);
     return AEE_SUCCESS;
 }
 
-/* Validate Params */
-static int validate_params(struct session *sess, uint32_t sc, remote_arg64 *params)
+/* convert session invoke parameters to remote_args */
+static int convert_params(struct session *sess, uint32_t sc, remote_arg *params, struct remote_args *out_params)
 {
+    int err = AEE_SUCCESS;
     QNode *node;
+    struct rpcmem *mem_node;
 
-    // Check if the fds in params are already mapped on the session
     for (size_t i = 0; i < REMOTE_SCALARS_LENGTH(sc); i++) {
-        bool found = false;
+        out_params[i].attrs = 0;
+        out_params[i].fd = -1;
+        out_params[i].offset = 0;
+        if(QList_IsEmpty(&sess->maps)) {
+            LOG_SESS_INV_INF("No memory maps found for session ID %d", sess->session_id);
+            continue;
+        }    
         QLIST_FOR_ALL(&sess->maps, node) {
-            struct rpcmem *mem_node = STD_RECOVER_REC(struct rpcmem, n, node);
-            if (mem_node->fd == params[i].dma.fd) {
-                found = true;
+            mem_node = STD_RECOVER_REC(struct rpcmem, n, node);
+            if (mem_node->ptr == params[i].buf.pv) {
+                out_params[i].attrs = mem_node->attr;
+                out_params[i].fd = mem_node->fd;
+                out_params[i].offset = mem_node->offset;
                 break;
             }
         }
-        if (!found) {
-            LOG_ERR("FD %d in params is not mapped on session ID %d", params[i].dma.fd, sess->session_id);
-            return AEE_EINVALIDPARAM;
-        }
+        out_params[i].pv = params[i].buf.pv;
+        out_params[i].nLen = params[i].buf.nLen;
     }
 
-    return AEE_SUCCESS;
+    return err;
 }
 
 /* Get Session from Handle */
@@ -750,28 +757,35 @@ int session_configure(struct session *sess, char* config_key, void *config_value
 }
 
 /* Invoke Session */
-int session_invoke(struct session *sess, remote_handle64 handle, uint32_t sc, remote_arg64 *params)
+int session_invoke(struct session *sess, remote_handle64 handle, uint32_t sc, remote_arg *params)
 {
     struct dsp *dsp = NULL; // Assume you have a way to get the DSP from the session
+    struct remote_args args[REMOTE_SCALARS_LENGTH(sc)];
+    int err = AEE_SUCCESS;
 
     if (validate_session(sess) != AEE_SUCCESS) {
         return AEE_EINVALIDPARAM;
     }
 
+    if(!params) {
+        LOG_SESS_INV_ERR("Invalid params for session ID %d", sess->session_id);
+        return AEE_EINVALIDPARAM;
+    }
+
     dsp = sess->dsp;
 
-    if (validate_params(sess, sc, params) != AEE_SUCCESS) {
-        LOG_SESS_INV_ERR("Invalid params for session ID %d handle %p", sess->session_id, (void *)handle);
-        return AEE_EINVALIDPARAM;
+    if((err = convert_params(sess, sc, params, &args)) != AEE_SUCCESS) {
+        LOG_SESS_INV_ERR("Failed to convert params for session ID %d", sess->session_id);
+        return err;
     }
 
     struct invoke_params invoke_args;
     invoke_args.handle = handle;
     invoke_args.sc = sc;
-    invoke_args.args = params;
+    invoke_args.args = &args;
 
     /* Call registered session callbacks for invoke */
-    int err = call_session_callbacks(dsp, CALLBACK_TYPE_INVOKE, &invoke_args);
+    err = call_session_callbacks(dsp, CALLBACK_TYPE_INVOKE, &invoke_args);
     if(err) {
         LOG_SESS_INV_ERR("Failed to invoke session ID %d with handle %p and sc %u", 
                  sess->session_id, (void *)handle, sc);
