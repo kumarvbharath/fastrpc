@@ -1,6 +1,8 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pthread -I./inc -fPIC -g
-LDFLAGS = -lpthread
+# Add coverage flags to CFLAGS
+CFLAGS = -Wall -Wextra -pthread -I./inc -fPIC -g --coverage -fprofile-arcs -ftest-coverage
+# Add gcov library to LDFLAGS
+LDFLAGS = -lpthread -lgcov --coverage
 LIBFLAGS = -shared
 
 # Directory structure
@@ -8,6 +10,14 @@ SRC_DIR = src
 TEST_DIR = test
 OBJ_DIR = obj
 LIB_DIR = lib
+
+# Add coverage directory
+COV_DIR = coverage
+
+# Coverage flags
+GCOV_FLAGS = -fprofile-arcs -ftest-coverage
+CFLAGS += $(GCOV_FLAGS)
+LDFLAGS += --coverage
 
 # Source files
 FASTRPC_SRC = $(wildcard $(SRC_DIR)/fastrpc/*.c)
@@ -28,10 +38,10 @@ TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_FILES))
 LIB_TARGET = $(LIB_DIR)/libdsprpc.so
 TEST_TARGETS = $(patsubst $(TEST_DIR)/test_%.c,%_test,$(TEST_FILES))
 
-.PHONY: all clean test
+.PHONY: all test
 
 # Default target builds everything and runs tests
-all: $(LIB_TARGET) test
+all: $(LIB_TARGET) test coverage-summary
 
 # Library target
 $(LIB_TARGET): $(OBJ_FILES)
@@ -57,19 +67,71 @@ $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c
 %_test: $(OBJ_FILES) $(OBJ_DIR)/test_%.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 	@echo "Running $@..."
-	./$@
+	@mkdir -p $(COV_DIR)/$*
+	./$@ || exit 1
+	@for dir in fastrpc remote; do \
+		mkdir -p $(OBJ_DIR)/$$dir; \
+		mv -f $$dir/*.gcda $(OBJ_DIR)/$$dir/ 2>/dev/null || true; \
+		mv -f $$dir/*.gcno $(OBJ_DIR)/$$dir/ 2>/dev/null || true; \
+	done
+	@gcov -o $(OBJ_DIR)/fastrpc -o $(OBJ_DIR)/remote $(SRC_FILES) 2>/dev/null | \
+		grep -v "No executable lines" | \
+		grep -v "cannot open" > $(COV_DIR)/$*/coverage.txt
 
 # Test rule runs all tests
 test: $(TEST_TARGETS)
 
 # Clean rule
 clean:
-	rm -rf $(OBJ_DIR) $(LIB_DIR) *_test
+	rm -rf $(OBJ_DIR) $(LIB_DIR) $(COV_DIR) *_test
+	find . -name "*.gc*" -delete
+	find . -name "*.gcov" -delete
+
+# Add coverage report generation
+coverage-%: %_test
+	@echo "Generating coverage report for $*..."
+	@gcov -o $(OBJ_DIR) $(SRC_FILES) 2>/dev/null | \
+		grep -v "No executable lines" | \
+		grep -v "cannot open" > $(COV_DIR)/$*/coverage.txt
+	@echo "Coverage files:"
+	@find $(OBJ_DIR) -name "*.gc*" -ls
+	@echo "Coverage summary for $*:"
+	@grep "File '.*'" $(COV_DIR)/$*/coverage.txt || true
+	@grep "Lines executed" $(COV_DIR)/$*/coverage.txt || true
+
+# Add target for all coverage reports
+coverage: $(TEST_TARGETS)
+	@mkdir -p $(COV_DIR)
+	@echo "Generating coverage reports..."
+	@for test in $(TEST_TARGETS); do \
+		mkdir -p $(COV_DIR)/$$test; \
+		gcov -o $(OBJ_DIR) $(SRC_FILES) 2>/dev/null | \
+			grep -v "No executable lines" | \
+			grep -v "cannot open" > $(COV_DIR)/$$test/coverage.txt; \
+	done
+	@echo "Coverage reports available in $(COV_DIR)/"
+
+# Add coverage summary target
+coverage-summary: $(TEST_TARGETS)
+	@echo "\nCode Coverage Summary:"
+	@echo "======================"
+	@for test in $(TEST_TARGETS); do \
+		echo "\nCoverage for $$test:"; \
+		mkdir -p $(COV_DIR)/$$test; \
+		gcov -o $(OBJ_DIR) $(SRC_FILES) 2>/dev/null | \
+			grep -v "No executable lines" | \
+			grep -v "cannot open" | \
+			grep "Lines executed" | \
+			sed 's/^/  /'; \
+	done
+	@echo "\nDetailed coverage reports available in $(COV_DIR)/"
 
 # Show help
 help:
 	@echo "Available targets:"
-	@echo "  all        - Build library and run all tests (default)"
+	@echo "  all        - Build library, run tests and show coverage (default)"
 	@echo "  test       - Build and run all tests"
-	@echo "  clean      - Remove all built files"
+	@echo "  clean      - Remove all built files and coverage data"
+	@echo "  coverage-summary - Show coverage summary for all tests"
+	@echo "  coverage-<test> - Generate coverage report for specific test"
 	@echo "  help       - Show this help message"
