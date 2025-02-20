@@ -21,7 +21,8 @@ LDFLAGS += --coverage
 
 # Source files
 FASTRPC_SRC = $(wildcard $(SRC_DIR)/fastrpc/*.c)
-SRC_FILES = $(FASTRPC_SRC)
+CORE_SRC = $(SRC_DIR)/init.c
+SRC_FILES = $(FASTRPC_SRC) $(CORE_SRC)
 
 # Remote files
 REMOTE_SRC = $(wildcard $(SRC_DIR)/remote/*.c)
@@ -31,6 +32,7 @@ SRC_FILES += $(REMOTE_SRC)
 TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
 
 # Object files
+CORE_OBJ = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(CORE_SRC))
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_FILES))
 
@@ -61,6 +63,11 @@ $(OBJ_DIR)/remote/%.o: $(SRC_DIR)/remote/%.c
 # Object files for tests
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Add core object file compilation rule
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Test targets

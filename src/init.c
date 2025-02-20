@@ -53,7 +53,7 @@ int fastrpc_init(void) {
     LOG_INF("Initializing FastRPC");
 
     if (g_initialized) {
-        LOG_WARN("FastRPC already initialized");
+        LOG_INF("FastRPC already initialized");
         return AEE_SUCCESS;
     }
 
@@ -82,7 +82,7 @@ int fastrpc_deinit(void) {
     LOG_INF("Deinitializing FastRPC");
 
     if (!g_initialized) {
-        LOG_WARN("FastRPC not initialized");
+        LOG_INF("FastRPC not initialized");
         return AEE_SUCCESS;
     }
 
