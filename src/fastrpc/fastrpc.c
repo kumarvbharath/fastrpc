@@ -641,6 +641,7 @@ remote_handle64 session_add_module(struct session *sess, const char *name)
 {
     struct module *mod;
     struct dsp *dsp;
+    int err = AEE_SUCCESS;
 
     if (!sess) {
         LOG_ERR("Invalid session pointer");
@@ -657,8 +658,17 @@ remote_handle64 session_add_module(struct session *sess, const char *name)
 
     strncpy(mod->name, name, sizeof(mod->name) - 1);
 
+    if(HASH_COUNT(handles) <= 0) {
+        err = call_session_callbacks(dsp, CALLBACK_TYPE_OPEN, mod->name);
+        if (err) {
+            LOG_ERR("Failed in open callback for session %d", sess->session_id);
+            free(mod);
+            return AEE_EFAILED;
+        }
+    }
+
     /* Call registered session callbacks for load */
-    int err = call_session_callbacks(dsp, CALLBACK_TYPE_LOAD, mod->name);
+    err = call_session_callbacks(dsp, CALLBACK_TYPE_LOAD, mod->name);
     if (err) {
         LOG_ERR("Failed to load module %s", mod->name);
         free(mod);
@@ -707,6 +717,12 @@ void session_remove_module(struct session *sess, remote_handle64 handle)
         HASH_DEL(handles, mod);
         pthread_spin_unlock(&handle_lock);
 
+        if(HASH_COUNT(handles) <= 0) {
+            err = call_session_callbacks(dsp, CALLBACK_TYPE_CLOSE, sess);
+            if (err) {
+                LOG_ERR("Failed in close callback for session %d", sess->session_id);
+            }
+        }
         pthread_spin_lock(&sess->lock);
         sess->active_users--;
         pthread_spin_unlock(&sess->lock);
