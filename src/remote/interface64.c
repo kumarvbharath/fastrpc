@@ -138,11 +138,7 @@ int remote_handle64_open(const char* uri, remote_handle64 *ph) {
         goto cleanup_info;
     }
 
-    // Initialize remote module
-    remote_init();
-
     void *dsp = dsp_init(info->domain);
-    LOG_INF("Initialized DSP for domain: %p, %d", dsp, info->domain);
     if (!dsp) {
         LOG_ERR("Failed to initialize DSP for domain: %d", info->domain);
         goto cleanup_info;
@@ -150,7 +146,6 @@ int remote_handle64_open(const char* uri, remote_handle64 *ph) {
 
     int session_id = (info->session == -1) ? 0 : info->session;
     struct session *sess = session_init(dsp, session_id);
-    LOG_INF("Intialized session %p, %d", sess, session_id);
     if (!sess) {
         LOG_ERR("Failed to initialize session for domain: %d, session: %d", info->domain, session_id);
         goto cleanup_dsp;

@@ -295,3 +295,8 @@ void add_rpcmem_node(void *buf, size_t size, int fd, uint32_t attr) {
     LOG_INF("Added rpcmem node with buf: %p, size: %zu, fd: %d, attr: %u", buf, size, fd, attr);
     pthread_mutex_unlock(&g_mem.lock);
 }
+
+void *rpcmem_dsp_callback(int event, void *ctx, void *data, int *retVal) {
+    LOG_INF("Dummy implementation for rpcmem_dsp_callback");
+    return NULL;
+}

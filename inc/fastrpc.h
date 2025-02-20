@@ -109,6 +109,9 @@ struct invoke_params {
     struct remote_args *args;
 };
 
+//Initialization function for all fastRPC DSP, Session and Module
+void fastrpc_core_init(void);
+
 /**
  * @brief Get a session object from a module handle
  * @param handle Module handle obtained from session_add_module

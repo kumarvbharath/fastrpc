@@ -113,6 +113,12 @@ struct mem_ops {
     void (*free)(void* ptr, int fd, size_t size);
 };
 
+/*
+ * register the dsp callback API. Notifies the init and deinit of
+ * the sessions created on the DSP.
+ */
+void *rpcmem_dsp_callback(int event, void *ctx, void *data, int *retVal)
+
 /** @defgroup rpcmem_api RPCMEM API functions
  *  @{
  */
