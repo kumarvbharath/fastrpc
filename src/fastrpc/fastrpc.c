@@ -159,6 +159,26 @@ void register_dsp_callback(int type, fastrpc_callback_t callback)
     LOG_INF("Registered DSP callback");
 }
 
+/* Unregister DSP Callback */
+void unregister_dsp_callback(int type, fastrpc_callback_t callback)
+{
+    QNode *node, *nnode;
+    struct dsp_callback_node *callback_node;
+
+    pthread_mutex_lock(&dsp_callbacks_lock);
+    QLIST_NEXTSAFE_FOR_ALL(&dsp_callbacks, node, nnode) {
+        callback_node = STD_RECOVER_REC(struct dsp_callback_node, n, node);
+        if (callback_node->type == type && callback_node->callback == callback) {
+            QNode_DequeueZ(&callback_node->n);
+            free(callback_node);
+            break;
+        }
+    }
+    pthread_mutex_unlock(&dsp_callbacks_lock);
+
+    LOG_INF("Unregistered DSP callback");
+}
+
 /* Register session callback to DSP */
 void register_session_callback(struct dsp *dsp, int type, fastrpc_callback_t callback)
 {
@@ -177,6 +197,26 @@ void register_session_callback(struct dsp *dsp, int type, fastrpc_callback_t cal
     unlock_dsp(dsp);
 
     LOG_INF("Registered session callback for DSP ID %d", dsp->dsp_id);
+}
+
+/* Unregister session callback from DSP */
+void unregister_session_callback(struct dsp *dsp, int type, fastrpc_callback_t callback)
+{
+    QNode *node, *nnode;
+    struct session_callback_node *callback_node;
+
+    lock_dsp(dsp);
+    QLIST_NEXTSAFE_FOR_ALL(&dsp->session_callbacks, node, nnode) {
+        callback_node = STD_RECOVER_REC(struct session_callback_node, n, node);
+        if (callback_node->type == type && callback_node->callback == callback) {
+            QNode_DequeueZ(&callback_node->n);
+            free(callback_node);
+            break;
+        }
+    }
+    unlock_dsp(dsp);
+
+    LOG_INF("Unregistered session callback for DSP ID %d", dsp->dsp_id);
 }
 
 /* Check if Session is in Use */
@@ -295,7 +335,7 @@ struct session *get_session_from_handle(remote_handle64 handle)
 }
 
 /* Initialize FastRPC */
-void fastrpc_init_impl(void)
+void fastrpc_core_init_impl(void)
 {
     pthread_mutexattr_t attr;
 
@@ -311,9 +351,9 @@ void fastrpc_init_impl(void)
     pthread_mutexattr_destroy(&attr);
 }
 
-void fastrpc_init(void)
+void fastrpc_core_init(void)
 {
-    pthread_once(&fastrpc_init_once, fastrpc_init_impl);
+    pthread_once(&fastrpc_init_once, fastrpc_core_init_impl);
 }
 
 /* Initialize DSP */
