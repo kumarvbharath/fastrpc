@@ -121,6 +121,7 @@ extern "C" {
 #define MDSP_DOMAIN_ID    1
 #define SDSP_DOMAIN_ID    2
 #define CDSP_DOMAIN_ID    3
+#define CDSP1_DOMAIN_ID   4
 
 /** Supported Domain Names */
 #define ADSP_DOMAIN_NAME "adsp"
