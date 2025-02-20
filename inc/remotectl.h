@@ -42,6 +42,9 @@
 #include "error.h"
 #include "log.h" 
 
+//should be 0
+#define REMOTECTL_HANDLE 0
+
 /**
  * @brief Dummy open function - not used in production
  *
