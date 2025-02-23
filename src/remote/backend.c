@@ -12,6 +12,13 @@
 #include "error.h"
 #include "log.h"
 
+// Device configuration
+#define DEVICE_NODE "/dev/fastrpc"
+// Configuration keys
+#define CONFIG_KEY_INIT_FLAGS    "fastrpc.init.flags"
+#define CONFIG_KEY_PD_TYPE       "fastrpc.pd.type"
+#define CONFIG_KEY_PD_ATTR       "fastrpc.pd.attr"
+
 static void* remote_session_callback(int event, void **ctx, void *data, int *retVal);
 
 struct session_ctx {
@@ -30,65 +37,83 @@ struct init_params {
     } shell, mem, testsig;
 };
 
+// Common session validation
+static int validate_session(struct session_ctx *sctx, const char *func) {
+    if (!sctx) {
+        LOG_ERR("%s: Invalid session context", func);
+        return AEE_EINVALIDPARAM;
+    }
+    LOG_DBG("%s: Valid session ctx %p, session %d, dsp %d", 
+           func, sctx, sctx->sess_id, sctx->domain_id);
+    return AEE_SUCCESS;
+}
+
+// Common DSP validation
+static int validate_dsp(struct dsp *dsp, const char *func) {
+    if (!dsp) {
+        LOG_ERR("%s: Invalid DSP handle", func);
+        return AEE_EINVALIDPARAM;
+    }
+    return AEE_SUCCESS;
+}
+
+// Common callback registration
+static int manage_callbacks(struct dsp *dsp, int operation, const char *func) {
+    int ret = AEE_SUCCESS;
+    uint32_t callback_types = CALLBACK_TYPE_INIT | CALLBACK_TYPE_DEINIT |
+                            CALLBACK_TYPE_OPEN | CALLBACK_TYPE_CLOSE |
+                            CALLBACK_TYPE_MAP | CALLBACK_TYPE_UNMAP |
+                            CALLBACK_TYPE_INVOKE;
+
+    if (operation == 0) { // Register
+        ret = register_session_callback(dsp, callback_types, remote_session_callback);
+        LOG_INF("%s: Callbacks registered %s", func, ret == AEE_SUCCESS ? "successfully" : "failed");
+    } else { // Unregister
+        ret = unregister_session_callback(dsp, callback_types, remote_session_callback);
+        LOG_INF("%s: Callbacks unregistered %s", func, ret == AEE_SUCCESS ? "successfully" : "failed");
+    }
+    
+    return ret;
+}
+
 static void* handle_dsp_init(void *data, int *retVal) {
     struct dsp *dsp = (struct dsp *)data;
-
-    if (!dsp) {
-        LOG_ERR("invalid DSP handle");
-        *retVal = AEE_EINVALIDPARAM;
+    
+    if ((*retVal = validate_dsp(dsp, __func__)) != AEE_SUCCESS) {
         return NULL;
     }
 
-    LOG_INF("Registering session callbacks for backend");
-    register_session_callback(dsp, (CALLBACK_TYPE_INIT | 
-                                    CALLBACK_TYPE_DEINIT |
-                                    CALLBACK_TYPE_OPEN |
-                                    CALLBACK_TYPE_CLOSE |
-                                    CALLBACK_TYPE_MAP |
-                                    CALLBACK_TYPE_UNMAP |
-                                    CALLBACK_TYPE_INVOKE),
-                                    remote_session_callback);
-
-    LOG_INF("Session callback registered successfully");    
-    *retVal = AEE_SUCCESS;
+    *retVal = manage_callbacks(dsp, 0, __func__);
     return NULL;
 }
 
 static void* handle_dsp_deinit(void *handle, int *retVal) {
     struct dsp *dsp = (struct dsp *)handle;
-
-    if (!dsp) {
-        LOG_ERR("invalid DSP handle");
-        *retVal = AEE_EINVALIDPARAM;
+    
+    if ((*retVal = validate_dsp(dsp, __func__)) != AEE_SUCCESS) {
         return NULL;
     }
 
-    unregister_session_callback(dsp, (CALLBACK_TYPE_INIT | 
-        CALLBACK_TYPE_DEINIT |
-        CALLBACK_TYPE_OPEN |
-        CALLBACK_TYPE_CLOSE |
-        CALLBACK_TYPE_MAP |
-        CALLBACK_TYPE_UNMAP |
-        CALLBACK_TYPE_INVOKE),
-        remote_session_callback);
-
-    LOG_INF("Session callback unregistered successfully");
-    *retVal = AEE_SUCCESS;
+    *retVal = manage_callbacks(dsp, 1, __func__);
     return NULL;
 }
 
 static void* handle_session_init(void **ctx, void *session, int *retVal) {
     struct session *sess = (struct session *)session;
-    *ctx = malloc(sizeof(struct session_ctx));
+    
+    *ctx = calloc(1, sizeof(struct session_ctx));
     if (!*ctx) {
         LOG_ERR("Failed to allocate session context");
         *retVal = AEE_ENOMEM;
         return NULL;
     }
+
     struct session_ctx *sctx = (struct session_ctx *)*ctx;
     sctx->sess_id = sess->session_id;
     sctx->domain_id = sess->dsp->dsp_id;
-    LOG_INF("Session context %p, session %d, dsp %d", *ctx, sctx->sess_id, sctx->domain_id);
+    
+    LOG_INF("Session context initialized: %p, session %d, dsp %d", 
+           *ctx, sctx->sess_id, sctx->domain_id);
     *retVal = AEE_SUCCESS;
     return NULL;
 }
@@ -170,70 +195,50 @@ static int handle_init_ioctl(int dev, uint32_t flags, struct init_params *params
 }
 
 static void* handle_session_open(void *ctx, void *config, int *retVal) {
-    config_store_t *cfg = (config_store_t *)config;
     struct session_ctx *sctx = (struct session_ctx *)ctx;
-/*
-    char filename[32], testsig = "testsig", devicenode[32] = "/dev/fastrpc";
+    config_store_t *cfg = (config_store_t *)config;
     struct init_params params = {0};
-    void *shell_buf = NULL;
-    size_t shell_size = 0;
+    char filename[32];
     int err;
 
-    LOG_INF("Session context %p sctx %p Config store %p", ctx, sctx, cfg);
-    if (!sctx) {
-        LOG_ERR("Null context!!!");
-        *retVal = AEE_ENOMEM;
+    if ((*retVal = validate_session(sctx, __func__)) != AEE_SUCCESS) {
         return NULL;
     }
 
-    // Get configuration
-    params.flags = *((int*)config_store_get(cfg, "fastrpc.init.flags"));
-    struct remote_process_type *pdtype = (struct remote_process_type*) config_store_get(config, "fastrpc.pd.type");
-    params.attr = *((int*)config_store_get(cfg, "fastrpc.pd.attr"));
+    // Get configuration using macros
+    params.flags = *((int*)config_store_get(cfg, CONFIG_KEY_INIT_FLAGS));
+    struct remote_process_type *pdtype = (struct remote_process_type*) 
+        config_store_get(cfg, CONFIG_KEY_PD_TYPE);
+    params.attr = *((int*)config_store_get(cfg, CONFIG_KEY_PD_ATTR));
     const char *type = (pdtype->process_type == 0) ? "signed" : "unsigned";
-    LOG_INF("sctx sessionid %d, domainid %d", sctx->sess_id, sctx->domain_id);
-    snprintf(filename, 32, "fastrpc_shell_%s_%d", type, sctx->domain_id);
+    snprintf(filename, sizeof(filename), "fastrpc_shell_%s_%d", type, sctx->domain_id);
 
-    LOG_INF("Init params: flags=%llx, attr=%llx, type=%s, filename=%s", params.flags, params.attr, type, filename);
-    // Read shell file if specified
-    if (filename) {
-        shell_buf = read_file_to_buffer(filename, &shell_size);
-        if (!shell_buf) {
-            free(sctx);
-            *retVal = AEE_EFAILED;
-            return NULL;
-        }
-        params.shell.data = shell_buf;
-        params.shell.len = shell_size;
+    LOG_INF("Init params: flags=%llx, attr=%llx, type=%s, filename=%s", 
+           params.flags, params.attr, type, filename);
+
+    // Load shell file
+    if ((*retVal = load_shell_file(filename, &params)) != AEE_SUCCESS) {
+        return NULL;
     }
 
-    // Open device
-    sctx->dev = open(devicenode, O_RDWR);
-    if (sctx->dev < 0) {
-        LOG_ERR("Failed to open device: %s", strerror(errno));
-        if (shell_buf) rpcmem_free(shell_buf);
-        free(sctx);
-        *retVal = AEE_EFAILED;
+    // Initialize device
+    if ((*retVal = init_device(sctx, DEVICE_NODE)) != AEE_SUCCESS) {
+        rpcmem_free(params.shell.data);
         return NULL;
     }
 
     // Handle initialization
-    err = handle_init_ioctl(sctx->dev, params.flags, &params);
-    if (err) {
-        LOG_ERR("Init failed: err=%d", err);
+    if ((*retVal = handle_init_ioctl(sctx->dev, params.flags, &params)) != AEE_SUCCESS) {
+        LOG_ERR("Init failed: err=%d", *retVal);
         close(sctx->dev);
-        if (shell_buf) rpcmem_free(shell_buf);
-        free(sctx);
-        *retVal = err;
+        rpcmem_free(params.shell.data);
         return NULL;
     }
 
     LOG_INF("Session opened successfully: dev=%d", sctx->dev);
-*/
     *retVal = AEE_SUCCESS;
     return NULL;
 }
-
 
 static void* handle_session_close(void *ctx, void *session, int *retVal) {
     struct session_ctx *sctx = (struct session_ctx *)ctx;
@@ -253,7 +258,7 @@ static void* handle_session_close(void *ctx, void *session, int *retVal) {
 static void* handle_session_invoke(void *ctx, void *invoke_params, int *retVal) {
     struct session_ctx *sctx = (struct session_ctx *)ctx;
     struct invoke_params *params = (struct invoke_params *)invoke_params;
-/*
+
     if (!sctx || !params || !params->args) {
         LOG_ERR("Invalid parameters");
         *retVal = AEE_EINVALIDPARAM;
@@ -275,7 +280,7 @@ static void* handle_session_invoke(void *ctx, void *invoke_params, int *retVal) 
     };
 
     *retVal = ioctl(sctx->dev, FASTRPC_IOCTL_INVOKE, &invoke);
-*/
+
     *retVal = AEE_SUCCESS;
     return NULL;
 }
@@ -366,9 +371,15 @@ void* remote_dsp_callback(int event, void **ctx, void *data, int *retVal)
     }
 }
 
-static void* remote_session_callback(int event, void **ctx, void *data, int *retVal)
-{
-    LOG_INF("Session event callback: event=%d data=%p", event, data);
+static void* remote_session_callback(int event, void **ctx, void *data, int *retVal) {
+    static const char *event_names[] = {
+        "INIT", "DEINIT", "OPEN", "CLOSE", "MAP", "UNMAP", "INVOKE"
+    };
+    
+    LOG_INF("Session event callback: %s (%d), data=%p", 
+           event < sizeof(event_names)/sizeof(event_names[0]) ? 
+           event_names[event] : "UNKNOWN", event, data);
+
     switch (event) {
         case CALLBACK_TYPE_INIT:
             return handle_session_init(ctx, data, retVal);
@@ -385,7 +396,7 @@ static void* remote_session_callback(int event, void **ctx, void *data, int *ret
         case CALLBACK_TYPE_UNMAP:
             return handle_session_unmap(*ctx, data, retVal);
         default:
-            LOG_ERR("Session unknown event callback: event=%d data=%p", event, data);
+            LOG_ERR("Unknown event callback: %d", event);
             *retVal = AEE_ENOTSUPPORTED;
             return NULL;
     }
