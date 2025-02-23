@@ -26,8 +26,9 @@ static int g_initialized = 0;
 
 // Update heap operations to match new function signature
 static void* heap_alloc(size_t size, uint32_t flags, int *fd) {
+    static int dummyfd = 1024;
     LOG_INF("Heap allocation: size=%zu flags=0x%x", size, flags);
-    *fd = -1; // Heap allocations don't use fd
+    *fd = dummyfd++; // Heap allocations don't use fd
     return malloc(size);
 }
 
@@ -296,7 +297,6 @@ void add_rpcmem_node(void *buf, size_t size, int fd, uint32_t attr) {
     pthread_mutex_unlock(&g_mem.lock);
 }
 
-void *rpcmem_dsp_callback(int event, void *ctx, void *data, int *retVal) {
-    LOG_INF("Dummy implementation for rpcmem_dsp_callback");
+void *rpcmem_dsp_callback(int event, void **ctx, void *data, int *retVal) {
     return NULL;
 }

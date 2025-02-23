@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "test_ioctl.h"
 #include "test_framework.h"
 #include "fastrpc.h"
 #include "remote.h"
@@ -44,12 +45,10 @@ int test_remote_handle_invoke(void)
     ASSERT_NOT_NULL(handle);
 
     int fds[2];
-    void *addrs[2];
+    void* addrs[2] = {0x80000000, 0x80002000};
     for (int i = 0; i < 2; i++) {
         fds[i] = open("/dev/null", O_RDWR);
         ASSERT_NOT_EQUAL(fds[i], -1);
-        addrs[0] = 0x80000000;
-        addrs[1] = 0x80002000;
         result = fastrpc_mmap(MAKE_EXTENDED_DOMAIN_ID(ADSP_DOMAIN_ID, 1), fds[i], addrs[i], 0, 4096, FASTRPC_MAP_STATIC);
         ASSERT_EQUAL(result, AEE_SUCCESS);
     }
@@ -224,9 +223,47 @@ int test_remote_handle_invoke_many_args(void)
     return 0;
 }
 
+void setup() {
+    FILE *fp = fopen("fastrpc_shell_unsigned_0", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_unsigned_1", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_unsigned_2", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_unsigned_3", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_signed_0", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_signed_1", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_signed_2", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+    fp = fopen("fastrpc_shell_signed_3", "wb");
+    fprintf(fp, "test");
+    fclose(fp);
+}
+
+void destroy() {
+    remove("fastrpc_shell_unsigned_0");
+    remove("fastrpc_shell_unsigned_1");
+    remove("fastrpc_shell_unsigned_2");
+    remove("fastrpc_shell_unsigned_3");
+    remove("fastrpc_shell_signed_0");
+    remove("fastrpc_shell_signed_1");
+    remove("fastrpc_shell_signed_2");
+    remove("fastrpc_shell_signed_3");
+}
+
 int main()
 {
-    fastrpc_init();
+    setup();
     RUN_TEST(test_remote_handle_open);
     RUN_TEST(test_remote_handle_open_invalid);
     RUN_TEST(test_remote_handle_invoke);
@@ -236,6 +273,7 @@ int main()
     RUN_TEST(test_concurrency_remote);
     RUN_TEST(test_remote_handle_invoke_many_args);
 
+    destroy();
     printf("All remote tests passed.\n");
     return 0;
 }

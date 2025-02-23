@@ -1,0 +1,1496 @@
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+src/fastrpc/fastrpc.c: In function ‘get_session_from_handle’:
+./inc/log.h:61:43: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 7 has type ‘remote_handle64 *’ {aka ‘long unsigned int *’} [-Wformat=]
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./inc/log.h:61:43: note: in definition of macro ‘INF’
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:343:5: note: in expansion of macro ‘LOG_INF’
+  343 |     LOG_INF("Handle %llx, handle_key %llx", &h, handle_key);
+      |     ^~~~~~~
+src/fastrpc/fastrpc.c:343:24: note: format string is defined here
+  343 |     LOG_INF("Handle %llx, handle_key %llx", &h, handle_key);
+      |                     ~~~^
+      |                        |
+      |                        long long unsigned int
+      |                     %ln
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+./inc/log.h:61:43: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 8 has type ‘remote_handle64’ {aka ‘long unsigned int’} [-Wformat=]
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./inc/log.h:61:43: note: in definition of macro ‘INF’
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:343:5: note: in expansion of macro ‘LOG_INF’
+  343 |     LOG_INF("Handle %llx, handle_key %llx", &h, handle_key);
+      |     ^~~~~~~
+src/fastrpc/fastrpc.c:343:41: note: format string is defined here
+  343 |     LOG_INF("Handle %llx, handle_key %llx", &h, handle_key);
+      |                                      ~~~^
+      |                                         |
+      |                                         long long unsigned int
+      |                                      %lx
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+./inc/log.h:61:43: warning: format ‘%llx’ expects argument of type ‘long long unsigned int’, but argument 7 has type ‘struct module *’ [-Wformat=]
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./inc/log.h:61:43: note: in definition of macro ‘INF’
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:345:5: note: in expansion of macro ‘LOG_INF’
+  345 |     LOG_INF("entry %llx", entry);
+      |     ^~~~~~~
+src/fastrpc/fastrpc.c:345:23: note: format string is defined here
+  345 |     LOG_INF("entry %llx", entry);
+      |                    ~~~^
+      |                       |
+      |                       long long unsigned int
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+src/fastrpc/fastrpc.c:351:62: error: ‘handle’ undeclared (first use in this function); did you mean ‘handles’?
+  351 |         LOG_ERR("Handle %p not found in hash table", (void *)handle);
+      |                                                              ^~~~~~
+./inc/log.h:45:136: note: in definition of macro ‘ERR’
+   45 |     #define ERR(fmt, ...) fprintf(stderr, "ERROR [%s][%s:%d][Thread %lu] : " fmt "\n", __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__);
+      |                                                                                                                                        ^~~~~~~~~~~
+src/fastrpc/fastrpc.c:351:9: note: in expansion of macro ‘LOG_ERR’
+  351 |         LOG_ERR("Handle %p not found in hash table", (void *)handle);
+      |         ^~~~~~~
+src/fastrpc/fastrpc.c:351:62: note: each undeclared identifier is reported only once for each function it appears in
+  351 |         LOG_ERR("Handle %p not found in hash table", (void *)handle);
+      |                                                              ^~~~~~
+./inc/log.h:45:136: note: in definition of macro ‘ERR’
+   45 |     #define ERR(fmt, ...) fprintf(stderr, "ERROR [%s][%s:%d][Thread %lu] : " fmt "\n", __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__);
+      |                                                                                                                                        ^~~~~~~~~~~
+src/fastrpc/fastrpc.c:351:9: note: in expansion of macro ‘LOG_ERR’
+  351 |         LOG_ERR("Handle %p not found in hash table", (void *)handle);
+      |         ^~~~~~~
+src/fastrpc/fastrpc.c: In function ‘global_configure’:
+src/fastrpc/fastrpc.c:386:49: warning: passing argument 3 of ‘config_store_set’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  386 |     return config_store_set(global_config, key, value, size);
+      |                                                 ^~~~~
+In file included from ./inc/fastrpc.h:17,
+                 from src/fastrpc/fastrpc.c:4:
+./inc/config.h:66:68: note: expected ‘void *’ but argument is of type ‘const char *’
+   66 | int config_store_set(config_store_t *store, const char *key, void *value, size_t size);
+      |                                                              ~~~~~~^~~~~
+src/fastrpc/fastrpc.c: In function ‘dsp_init’:
+src/fastrpc/fastrpc.c:420:27: warning: passing argument 1 of ‘pthread_mutex_destroy’ from incompatible pointer type [-Wincompatible-pointer-types]
+  420 |     pthread_mutex_destroy(&attr);
+      |                           ^~~~~
+      |                           |
+      |                           pthread_mutexattr_t * {aka union <anonymous> *}
+In file included from ./inc/fastrpc.h:7,
+                 from src/fastrpc/fastrpc.c:4:
+/usr/include/pthread.h:730:52: note: expected ‘pthread_mutex_t *’ {aka ‘union <anonymous> *’} but argument is of type ‘pthread_mutexattr_t *’ {aka ‘union <anonymous> *’}
+  730 | extern int pthread_mutex_destroy (pthread_mutex_t *__mutex)
+      |                                   ~~~~~~~~~~~~~~~~~^~~~~~~
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+./inc/log.h:61:43: warning: too many arguments for format [-Wformat-extra-args]
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./inc/log.h:61:43: note: in definition of macro ‘INF’
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:433:5: note: in expansion of macro ‘LOG_DSP_INIT_INF’
+  433 |     LOG_DSP_INIT_INF("Initialized DSP ID %d, %p", dsp_id, dsp, dsp->active_dsp);
+      |     ^~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c: In function ‘session_register_module’:
+src/fastrpc/fastrpc.c:719:16: warning: comparison of integer expressions of different signedness: ‘remote_handle64’ {aka ‘long unsigned int’} and ‘int’ [-Wsign-compare]
+  719 |     if (handle == INVALID_HANDLE) {
+      |                ^~
+src/fastrpc/fastrpc.c:707:17: warning: variable ‘dsp’ set but not used [-Wunused-but-set-variable]
+  707 |     struct dsp *dsp;
+      |                 ^~~
+src/fastrpc/fastrpc.c: In function ‘session_remove_module’:
+src/fastrpc/fastrpc.c:808:15: warning: comparison of integer expressions of different signedness: ‘remote_handle64’ {aka ‘long unsigned int’} and ‘int’ [-Wsign-compare]
+  808 |     if(handle == INVALID_HANDLE) {
+      |               ^~
+src/fastrpc/fastrpc.c: In function ‘session_invoke’:
+src/fastrpc/fastrpc.c:901:15: warning: comparison of integer expressions of different signedness: ‘remote_handle64’ {aka ‘long unsigned int’} and ‘int’ [-Wsign-compare]
+  901 |     if(handle == INVALID_HANDLE) {
+      |               ^~
+src/fastrpc/fastrpc.c:908:48: warning: passing argument 4 of ‘convert_params’ from incompatible pointer type [-Wincompatible-pointer-types]
+  908 |     if((err = convert_params(sess, sc, params, &args)) != AEE_SUCCESS) {
+      |                                                ^~~~~
+      |                                                |
+      |                                                struct remote_args (*)[(sizetype)((sc >> 16 & 255) + (sc >> 8 & 255) + (sc >> 4 & 15) + (sc & 15))]
+src/fastrpc/fastrpc.c:306:102: note: expected ‘struct remote_args *’ but argument is of type ‘struct remote_args (*)[(sizetype)((sc >> 16 & 255) + (sc >> 8 & 255) + (sc >> 4 & 15) + (sc & 15))]’
+  306 | static int convert_params(struct session *sess, uint32_t sc, remote_arg *params, struct remote_args *out_params)
+      |                                                                                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+src/fastrpc/fastrpc.c:916:22: warning: assignment to ‘struct remote_args *’ from incompatible pointer type ‘struct remote_args (*)[(sizetype)((sc >> 16 & 255) + (sc >> 8 & 255) + (sc >> 4 & 15) + (sc & 15))]’ [-Wincompatible-pointer-types]
+  916 |     invoke_args.args = &args;
+      |                      ^
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+./inc/log.h:45:43: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 8 has type ‘remote_handle64’ {aka ‘long unsigned int’} [-Wformat=]
+   45 |     #define ERR(fmt, ...) fprintf(stderr, "ERROR [%s][%s:%d][Thread %lu] : " fmt "\n", __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__);
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./inc/log.h:45:43: note: in definition of macro ‘ERR’
+   45 |     #define ERR(fmt, ...) fprintf(stderr, "ERROR [%s][%s:%d][Thread %lu] : " fmt "\n", __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__);
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:921:9: note: in expansion of macro ‘LOG_SESS_INV_ERR’
+  921 |         LOG_SESS_INV_ERR("Failed to invoke session ID %d with handle %x and sc %u",
+      |         ^~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:921:71: note: format string is defined here
+  921 |         LOG_SESS_INV_ERR("Failed to invoke session ID %d with handle %x and sc %u",
+      |                                                                      ~^
+      |                                                                       |
+      |                                                                       unsigned int
+      |                                                                      %lx
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+./inc/log.h:61:43: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 8 has type ‘remote_handle64’ {aka ‘long unsigned int’} [-Wformat=]
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./inc/log.h:61:43: note: in definition of macro ‘INF’
+   61 |     #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:927:5: note: in expansion of macro ‘LOG_SESS_INV_INF’
+  927 |     LOG_SESS_INV_INF("Invoked session ID %d with handle %x and sc %u", sess->session_id, handle, sc);
+      |     ^~~~~~~~~~~~~~~~
+src/fastrpc/fastrpc.c:927:58: note: format string is defined here
+  927 |     LOG_SESS_INV_INF("Invoked session ID %d with handle %x and sc %u", sess->session_id, handle, sc);
+      |                                                         ~^
+      |                                                          |
+      |                                                          unsigned int
+      |                                                         %lx
+In file included from ./inc/config.h:15,
+                 from ./inc/fastrpc.h:17,
+                 from src/fastrpc/fastrpc.c:4:
+src/fastrpc/fastrpc.c: In function ‘get_session_from_handle’:
+./inc/uthash.h:430:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  430 |      case 11: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[10] << 24 ), &hashv); \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:431:6: note: here
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:431:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:432:6: note: here
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:432:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:433:6: note: here
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:433:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:434:6: note: here
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:434:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:435:6: note: here
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:435:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:436:6: note: here
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:436:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:437:6: note: here
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:437:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:438:6: note: here
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:438:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:439:6: note: here
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:439:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:440:6: note: here
+  440 |      case 1:  __builtin_add_overflow(_hj_i, _hj_key[0], &_hj_i);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:344:5: note: in expansion of macro ‘HASH_FIND_INT’
+  344 |     HASH_FIND_INT(handles, &h, entry);
+      |     ^~~~~~~~~~~~~
+src/fastrpc/fastrpc.c: In function ‘session_register_module’:
+./inc/uthash.h:430:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  430 |      case 11: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[10] << 24 ), &hashv); \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:431:6: note: here
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:431:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:432:6: note: here
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:432:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:433:6: note: here
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:433:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:434:6: note: here
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:434:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:435:6: note: here
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:435:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:436:6: note: here
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:436:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:437:6: note: here
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:437:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:438:6: note: here
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:438:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:439:6: note: here
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:439:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:440:6: note: here
+  440 |      case 1:  __builtin_add_overflow(_hj_i, _hj_key[0], &_hj_i);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:737:5: note: in expansion of macro ‘HASH_ADD_INT’
+  737 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+src/fastrpc/fastrpc.c: In function ‘session_add_module’:
+./inc/uthash.h:430:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  430 |      case 11: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[10] << 24 ), &hashv); \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:431:6: note: here
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:431:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:432:6: note: here
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:432:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:433:6: note: here
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:433:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:434:6: note: here
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:434:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:435:6: note: here
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:435:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:436:6: note: here
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:436:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:437:6: note: here
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:437:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:438:6: note: here
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:438:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:439:6: note: here
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:439:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+./inc/uthash.h:440:6: note: here
+  440 |      case 1:  __builtin_add_overflow(_hj_i, _hj_key[0], &_hj_i);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:177:2: note: in expansion of macro ‘HASH_FCN’
+  177 |  HASH_FCN(keyptr,keylen_in, (head)->hh.tbl->num_buckets,                         \
+      |  ^~~~~~~~
+./inc/uthash.h:158:9: note: in expansion of macro ‘HASH_ADD_KEYPTR’
+  158 |         HASH_ADD_KEYPTR(hh,head,&add->fieldname,keylen_in,add)
+      |         ^~~~~~~~~~~~~~~
+./inc/uthash.h:254:5: note: in expansion of macro ‘HASH_ADD’
+  254 |     HASH_ADD(hh,head,intfield,sizeof(int),add)
+      |     ^~~~~~~~
+src/fastrpc/fastrpc.c:790:5: note: in expansion of macro ‘HASH_ADD_INT’
+  790 |     HASH_ADD_INT(handles, handle, mod);
+      |     ^~~~~~~~~~~~
+src/fastrpc/fastrpc.c: In function ‘session_remove_module’:
+./inc/uthash.h:430:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  430 |      case 11: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[10] << 24 ), &hashv); \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:431:6: note: here
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:431:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  431 |      case 10: __builtin_add_overflow(hashv, ( (unsigned)_hj_key[9] << 16 ), &hashv);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:432:6: note: here
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:432:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  432 |      case 9:  __builtin_add_overflow(hashv, ( (unsigned)_hj_key[8] << 8 ), &hashv);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:433:6: note: here
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:433:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  433 |      case 8:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[7] << 24 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:434:6: note: here
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:434:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  434 |      case 7:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[6] << 16 ), &_hj_j);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:435:6: note: here
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:435:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  435 |      case 6:  __builtin_add_overflow(_hj_j, ( (unsigned)_hj_key[5] << 8 ), &_hj_j);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:436:6: note: here
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:436:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  436 |      case 5:  __builtin_add_overflow(_hj_j, _hj_key[4], &_hj_j);                      \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:437:6: note: here
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:437:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  437 |      case 4:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[3] << 24 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:438:6: note: here
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:438:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  438 |      case 3:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[2] << 16 ), &_hj_i);  \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:439:6: note: here
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:439:15: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  439 |      case 2:  __builtin_add_overflow(_hj_i, ( (unsigned)_hj_key[1] << 8 ), &_hj_i);   \
+      |               ^~~~~~~~~~~~~~~~~~~~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+./inc/uthash.h:440:6: note: here
+  440 |      case 1:  __builtin_add_overflow(_hj_i, _hj_key[0], &_hj_i);                      \
+      |      ^~~~
+./inc/uthash.h:340:18: note: in expansion of macro ‘HASH_JEN’
+  340 | #define HASH_FCN HASH_JEN
+      |                  ^~~~~~~~
+./inc/uthash.h:97:6: note: in expansion of macro ‘HASH_FCN’
+   97 |      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
+      |      ^~~~~~~~
+./inc/uthash.h:252:5: note: in expansion of macro ‘HASH_FIND’
+  252 |     HASH_FIND(hh,head,findint,sizeof(int),out)
+      |     ^~~~~~~~~
+src/fastrpc/fastrpc.c:816:5: note: in expansion of macro ‘HASH_FIND_INT’
+  816 |     HASH_FIND_INT(handles, (void*)handle, mod);
+      |     ^~~~~~~~~~~~~
+In file included from ./inc/fastrpc.h:15,
+                 from src/fastrpc/fastrpc.c:4:
+At top level:
+./inc/log.h:30:13: warning: ‘print_backtrace’ defined but not used [-Wunused-function]
+   30 | static void print_backtrace() {
+      |             ^~~~~~~~~~~~~~~
+make: *** [Makefile:56: obj/fastrpc/fastrpc.o] Error 1

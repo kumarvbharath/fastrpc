@@ -38,12 +38,13 @@
 
 #include <string.h>
 #include <inttypes.h>
+#include "fastrpc.h"
 #include "remote64.h"
 #include "error.h"
 #include "log.h" 
 
 //should be 0
-#define REMOTECTL_HANDLE 0
+#define REMOTECTL_HANDLE 8
 
 /**
  * @brief Dummy open function - not used in production
@@ -66,41 +67,6 @@ int remotectl1_open(const char* uri, remote_handle64* h);
  * @return Always returns AEE_SUCCESS
  */
 int remotectl1_close(remote_handle64 h);
-
-/**
- * @brief Load a shared library on the DSP
- *
- * Loads the specified library on the DSP and returns a handle to the loaded module.
- * Any errors during loading are returned in the error buffer.
- *
- * @param _handle Remote handle (must be 0)
- * @param name Name of the library to load
- * @param handle Output parameter to store loaded module handle
- * @param dlerror Buffer to store error messages
- * @param dlerrorLen Length of error buffer
- * @param nErr Output parameter to store error code
- * @return AEE_SUCCESS on success, error code otherwise
- * @note Thread-safe
- */
-int remotectl1_open1(remote_handle64 _handle, const char* name, 
-                    int* handle, char* dlerror, int dlerrorLen, int* nErr);
-
-/**
- * @brief Unload a shared library from the DSP
- *
- * Unloads a previously loaded library identified by its handle.
- * Any errors during unloading are returned in the error buffer.
- *
- * @param _handle Remote handle (must be 0)
- * @param handle Module handle to unload
- * @param dlerror Buffer to store error messages
- * @param dlerrorLen Length of error buffer
- * @param nErr Output parameter to store error code
- * @return AEE_SUCCESS on success, error code otherwise
- * @note Thread-safe
- */
-int remotectl1_close1(remote_handle64 _handle, int handle,
-                     char* dlerror, int dlerrorLen, int* nErr);
 
 /**
  * @brief Grow the DSP heap
@@ -131,4 +97,6 @@ int remotectl1_grow_heap(remote_handle64 _handle, uint32_t phyAddr, uint32_t nSi
 int remotectl1_set_param(remote_handle64 _handle, int reqID,
                         const uint32_t* params, int paramsLen);
 
+
+void *remotectl_dsp_callback(int event, void **ctx, void *data, int *retVal);
 #endif // __REMOTECTL_H__

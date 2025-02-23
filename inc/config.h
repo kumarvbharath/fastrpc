@@ -63,7 +63,7 @@ void config_store_destroy(config_store_t *store);
  * @thread_safety Thread-safe, uses internal mutex
  * @note Caller retains ownership of value memory
  */
-int config_store_set(config_store_t *store, const char *key, void *value);
+int config_store_set(config_store_t *store, const char *key, void *value, size_t size);
 
 /**
  * @brief Retrieves a configuration value from the store

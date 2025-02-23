@@ -24,7 +24,7 @@ static void* concurrent_different_keys(void *arg) {
         int *value = malloc(sizeof(int));
         *value = i;
         
-        if (config_store_set(ctx->store, key, value) != AEE_SUCCESS) {
+        if (config_store_set(ctx->store, key, value, sizeof(int)) != AEE_SUCCESS) {
             ctx->success = 0;
             break;
         }
@@ -47,7 +47,7 @@ static void* concurrent_same_key(void *arg) {
         int *value = malloc(sizeof(int));
         *value = ctx->thread_id * 1000 + i;
         
-        if (config_store_set(ctx->store, key, value) != AEE_SUCCESS) {
+        if (config_store_set(ctx->store, key, value, sizeof(int)) != AEE_SUCCESS) {
             ctx->success = 0;
             break;
         }
@@ -69,7 +69,7 @@ static int test_config_basic(void) {
 
     int *value = malloc(sizeof(int));
     *value = 42;
-    ASSERT_EQUAL(config_store_set(store, "test_key", value), AEE_SUCCESS);
+    ASSERT_EQUAL(config_store_set(store, "test_key", value, sizeof(int)), AEE_SUCCESS);
 
     void *retrieved = config_store_get(store, "test_key");
     ASSERT_NOT_NULL(retrieved);
@@ -95,7 +95,7 @@ static int test_config_negative(void) {
     long_key[63] = '\0';
     int *value = malloc(sizeof(int));
     *value = 42;
-    ASSERT_EQUAL(config_store_set(store, long_key, value), AEE_SUCCESS);
+    ASSERT_EQUAL(config_store_set(store, long_key, value, sizeof(int)), AEE_SUCCESS);
 
     config_store_destroy(store);
     return 0;

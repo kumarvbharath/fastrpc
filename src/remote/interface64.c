@@ -74,8 +74,8 @@ static uri_info_t* parse_uri(const char* uri) {
         return NULL;
     }
 
-    info->domain = -1;
-    info->session = -1;
+    info->domain = 3;  // Default domain value
+    info->session = 0; // Default session value
 
     // Copy URI to a modifiable string
     char *uri_copy = strdup(uri);
@@ -97,12 +97,14 @@ static uri_info_t* parse_uri(const char* uri) {
         goto cleanup;
     }
 
+    bool found_interface = false;
     while ((token = strtok_r(NULL, "&", &saveptr)) != NULL) {
         if (strncmp(token, "_dom=", 5) == 0) {
-            info->domain = convert_domain_to_id(token + 5);
-            if (info->domain == -1) {
+            int domain = convert_domain_to_id(token + 5);
+            if (domain == -1) {
                 goto cleanup;
             }
+            info->domain = domain;
         } else if (strncmp(token, "_session=", 9) == 0) {
             info->session = atoi(token + 9);
         } else if (strstr(token, "_skel_handle_invoke") != NULL) {
@@ -110,7 +112,12 @@ static uri_info_t* parse_uri(const char* uri) {
             if (!info->interface) {
                 goto cleanup;
             }
+            found_interface = true;
         }
+    }
+
+    if (!found_interface) {
+        goto cleanup;  // Interface is required
     }
 
     free(uri_copy);
@@ -127,6 +134,7 @@ cleanup:
 int remote_handle64_open(const char* uri, remote_handle64 *ph) {
     fastrpc_init();
 
+    LOG_INF("Opening remote handle for URI: %s", uri);
     uri_info_t *info = parse_uri(uri);
     if (!info) {
         LOG_ERR("Failed to parse URI: %s", uri);
@@ -150,6 +158,9 @@ int remote_handle64_open(const char* uri, remote_handle64 *ph) {
         LOG_ERR("Failed to initialize session for domain: %d, session: %d", info->domain, session_id);
         goto cleanup_dsp;
     }
+
+    // One-time initialization for static modules
+    register_static_modules(sess);
 
     uintptr_t module_handle = session_add_module(sess, info->sofilename);
     if (!module_handle) {
@@ -182,6 +193,7 @@ cleanup_info:
 int remote_handle64_invoke(remote_handle64 h, uint32_t dwScalars, remote_arg *pra) {
     fastrpc_init();
 
+    LOG_INF("Invoking remote handle: %llx", h);
     struct session *sess = get_session_from_handle(h);
     if (!sess) {
         LOG_ERR("Failed to get session from handle: %llx", h);
@@ -232,18 +244,24 @@ int remote_handle64_control(remote_handle64 h, uint32_t req, void* data, uint32_
 int remote_session_control(uint32_t req, void *data, uint32_t datalen) {
     fastrpc_init();
 
-    struct session *sess = get_session_from_handle((remote_handle64)data);
-    if (!sess) {
-        LOG_ERR("Failed to get session from handle: %p", data);
+    if (!data || datalen <= 0) {
+        LOG_ERR("Invalid data or data length");
         return AEE_EINVALIDPARAM;
     }
 
-    int result = session_configure(sess, req, data);
-    if (result != AEE_SUCCESS) {
-        LOG_ERR("Failed to configure session with handle: %p, req: %u, result: %d", data, req, result);
-        return result;
+    if(req == DSPRPC_CONTROL_UNSIGNED_MODULE) {
+        global_configure("fastrpc.pd.type", data, datalen);
+    } else if(req == FASTRPC_THREAD_PARAMS) {
+        global_configure("fastrpc.thread.priority", data, datalen);
+        global_configure("fastrpc.thread.stacksize", data, datalen);
+    } else if(req == FASTRPC_CONTROL_PD_DUMP) {
+        global_configure("fastrpc.pd.dump", data, datalen);
+    } else if (req == FASTRPC_PD_INITMEM_SIZE) {
+        global_configure("fastrpc.pd.initmem.size", data, datalen);
+    } else {
+        LOG_ERR("Invalid request passed %d", req);
+        return AEE_ENOTSUPPORTED;
     }
-
     LOG_INF("Successfully configured session with handle: %p, req: %u", data, req);
     return AEE_SUCCESS;
 }

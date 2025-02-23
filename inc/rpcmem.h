@@ -97,6 +97,7 @@ struct rpcmem {
     int fd;
     uint32_t offset;
     uint32_t attr;
+    uint32_t flags;
     int ref;
     void (*free_fn)(void*, int, size_t);
     QNode n;
@@ -117,7 +118,7 @@ struct mem_ops {
  * register the dsp callback API. Notifies the init and deinit of
  * the sessions created on the DSP.
  */
-void *rpcmem_dsp_callback(int event, void *ctx, void *data, int *retVal);
+void *rpcmem_dsp_callback(int event, void **ctx, void *data, int *retVal);
 
 /** @defgroup rpcmem_api RPCMEM API functions
  *  @{

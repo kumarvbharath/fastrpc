@@ -42,6 +42,13 @@
     } \
 } while (0)
 
+#define ASSERT_GT(a, b) do { \
+    if ((a) <= (b)) { \
+        printf("Assertion failed: %s > %s, function %s, file %s, line %d.\n", #a, #b, __func__, __FILE__, __LINE__); \
+        return 1; \
+    } \
+} while (0)
+
 #define RUN_TEST(test) do { \
     printf("Running %s...\n", #test); \
     if (test() != 0) { \

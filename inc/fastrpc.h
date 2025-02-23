@@ -18,6 +18,7 @@
 #include "remote.h"
 #include "uthash.h"
 
+#define INVALID_HANDLE -1
 #define MAKE_EXTENDED_DOMAIN_ID(domain, session) ((domain << 16) | session)
 #define GET_DOMAIN_ID(domain) (domain >> 16)
 #define GET_SESSION_ID(domain) (domain & 0xFFFF)
@@ -28,28 +29,28 @@
  */
  enum {
     /** Called during session initialization to setup session resources */
-    CALLBACK_TYPE_INIT,
+    CALLBACK_TYPE_INIT = 1,
     /** Called during session deinitialization for cleanup */
-    CALLBACK_TYPE_DEINIT,
+    CALLBACK_TYPE_DEINIT = 2,
     /** Called when first module is opened in a session */
-    CALLBACK_TYPE_OPEN,
+    CALLBACK_TYPE_OPEN = 4,
     /** Called when last module is closed in a session */
-    CALLBACK_TYPE_CLOSE,
+    CALLBACK_TYPE_CLOSE = 8,
     /** Called for each remote_handle_open operation */
-    CALLBACK_TYPE_LOAD,
+    CALLBACK_TYPE_LOAD = 16,
     /** Called for each remote_handle_close operation */
-    CALLBACK_TYPE_UNLOAD,
+    CALLBACK_TYPE_UNLOAD = 32,
     /** Called when remote_session_control/config modifies session parameters */
-    CALLBACK_TYPE_CONFIGURE,
+    CALLBACK_TYPE_CONFIGURE = 64,
     /** Called for each remote_handle_invoke RPC call */
-    CALLBACK_TYPE_INVOKE,
+    CALLBACK_TYPE_INVOKE = 128,
     /** Called when fastrpc_mmap maps memory for RPC use */
-    CALLBACK_TYPE_MAP,
+    CALLBACK_TYPE_MAP = 256,
     /** Called when fastrpc_munmap unmaps previously mapped memory */
-    CALLBACK_TYPE_UNMAP,
+    CALLBACK_TYPE_UNMAP = 512,
 };
 
-typedef void* (*fastrpc_callback_t)(int type, void *ctx, void *data, int *retVal);
+typedef void* (*fastrpc_callback_t)(int type, void **ctx, void *data, int *retVal);
 
 struct dsp_callback_node {
     int type;
@@ -62,6 +63,12 @@ struct session_callback_node {
     int type;
     void *context;
     fastrpc_callback_t callback;
+    QNode n;
+};
+
+struct static_module {
+    remote_handle64 handle;
+    char name[32];
     QNode n;
 };
 
@@ -104,6 +111,7 @@ struct remote_args {
 };
 
 struct invoke_params {
+    int type;
     remote_handle64 handle;
     uint32_t sc;
     struct remote_args *args;
@@ -111,6 +119,8 @@ struct invoke_params {
 
 //Initialization function for all fastRPC DSP, Session and Module
 void fastrpc_core_init(void);
+
+int global_configure(const char *key, const char *value, size_t size);
 
 /**
  * @brief Get a session object from a module handle
@@ -128,7 +138,7 @@ void fastrpc_core_init(void);
   * @note Does not validate if callback is already registered
   */
  void register_dsp_callback(int type, fastrpc_callback_t callback);
- 
+
  /**
   * @brief Register a callback for session-specific events on a DSP
   * @param dsp DSP handle obtained from dsp_init
@@ -138,7 +148,26 @@ void fastrpc_core_init(void);
   * @note Does not validate if callback is already registered
   */
  void register_session_callback(struct dsp *dsp, int type, fastrpc_callback_t callback);
- 
+
+  /**
+  * @brief Unregister a callback for DSP-wide events
+  * @param type Callback type from CALLBACK_TYPE_* enum
+  * @param callback Function pointer to handle the callback
+  * @thread_safety Thread-safe using dsp_callbacks_lock mutex
+  * @note Does not validate if callback is already registered
+  */
+ void unregister_dsp_callback(int type, fastrpc_callback_t callback);
+
+ /**
+  * @brief Unregister a callback for session-specific events on a DSP
+  * @param dsp DSP handle obtained from dsp_init
+  * @param type Callback type from CALLBACK_TYPE_* enum
+  * @param callback Function pointer to handle the callback
+  * @thread_safety Thread-safe using dsp->dsp_lock mutex
+  * @note Does not validate if callback is already registered
+  */
+ void unregister_session_callback(struct dsp *dsp, int type, fastrpc_callback_t callback);
+
  /**
   * @brief Initialize a DSP instance
   * @param dsp_id Unique identifier for the DSP
@@ -199,6 +228,8 @@ void fastrpc_core_init(void);
   */
  void put_session(struct session *sess);
  
+ int session_register_module(struct session *sess, const char *name, remote_handle64 handle);
+
  /**
   * @brief Add a module to a session
   * @param sess Session handle
@@ -227,7 +258,7 @@ void fastrpc_core_init(void);
   * @retval AEE_EINVALIDPARAM if session is invalid
   * @thread_safety Thread-safe through session validation
   */
- int session_configure(struct session *sess, char* config_key, void *config_value);
+ int session_configure(struct session *sess, char* config_key, void *config_value, size_t size);
  
  /**
   * @brief Invoke a remote procedure call on a session

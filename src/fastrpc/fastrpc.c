@@ -49,6 +49,13 @@ static struct module *handles = NULL; // Handle hash table
 /* Initialization control */
 static pthread_once_t fastrpc_init_once = PTHREAD_ONCE_INIT;
 
+/* Configuration store for all session configs */
+static config_store_t *global_config = NULL;
+
+/* Static handle list */
+static QList static_modules;
+static pthread_mutex_t static_modules_lock;
+
 /* Helper function to lock and unlock dsp_list_lock */
 static void lock_dsp_list() {
     pthread_mutex_lock(&dsp_list_lock);
@@ -107,14 +114,27 @@ static int call_dsp_callbacks(int callback_type, void *data) {
 
     QLIST_NEXTSAFE_FOR_ALL(&dsp_callbacks, node, nnode) {
         struct dsp_callback_node *callback_node = STD_RECOVER_REC(struct dsp_callback_node, n, node);
-        if (callback_node->type == callback_type) {
-            callback_node->callback(callback_type, callback_node->context, data, &err);
+        if (callback_node->type & callback_type) {
+            callback_node->callback(callback_type, &callback_node->context, data, &err);
             if (err) {
                 return err;
             }
         }
     }
     return AEE_SUCCESS;
+}
+
+void cleanup_dsp_callbacks() {
+    QNode *node, *nnode;
+    struct dsp_callback_node *callback_node;
+
+    pthread_mutex_lock(&dsp_callbacks_lock);
+    QLIST_NEXTSAFE_FOR_ALL(&dsp_callbacks, node, nnode) {
+        callback_node = STD_RECOVER_REC(struct dsp_callback_node, n, node);
+        QNode_DequeueZ(&callback_node->n);
+        free(callback_node);
+    }
+    pthread_mutex_unlock(&dsp_callbacks_lock);
 }
 
 /* Helper function to call session callbacks */
@@ -129,8 +149,9 @@ static int call_session_callbacks(struct dsp *dsp, int callback_type, void *data
 
     QLIST_NEXTSAFE_FOR_ALL(&dsp->session_callbacks, node, nnode) {
         struct session_callback_node *callback_node = STD_RECOVER_REC(struct session_callback_node, n, node);
-        if (callback_node->type == callback_type) {
-            callback_node->callback(callback_type, callback_node->context, data, &err);
+        if (callback_node->type & callback_type) {
+            callback_node->callback(callback_type, &callback_node->context, data, &err);
+            LOG_INF("Session callback context %p", callback_node->context);
             if (err) {
                 return err;
             }
@@ -323,13 +344,15 @@ struct session *get_session_from_handle(remote_handle64 handle)
     struct module *entry = NULL;
 
     pthread_spin_lock(&handle_lock);
-    HASH_FIND_INT(handles, (void*)handle, entry);
+    LOG_INF("Handle %llx", handle);
+    HASH_FIND_INT(handles, &handle, entry);
+    LOG_INF("entry %llx", entry);
     pthread_spin_unlock(&handle_lock);
 
     if (entry) {
         return entry->sess;
     } else {
-        LOG_ERR("Handle %p not found in hash table", (void *)handle);
+        LOG_ERR("Handle %llx not found in hash table", handle);
         return NULL;
     }
 }
@@ -348,12 +371,23 @@ void fastrpc_core_init_impl(void)
     pthread_spin_init(&handle_lock, PTHREAD_PROCESS_PRIVATE);
     pthread_mutex_init(&dsp_callbacks_lock, &attr);
 
+    global_config = config_store_create();
+
     pthread_mutexattr_destroy(&attr);
 }
 
 void fastrpc_core_init(void)
 {
     pthread_once(&fastrpc_init_once, fastrpc_core_init_impl);
+}
+
+int global_configure(const char *key, const char *value, size_t size)
+{
+    if (!global_config) {
+        LOG_ERR("Global config store not initialized");
+        return AEE_EFAILED;
+    }
+    return config_store_set(global_config, key, value, size);
 }
 
 /* Initialize DSP */
@@ -387,6 +421,7 @@ struct dsp *dsp_init(int dsp_id)
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&dsp->dsp_lock, &attr);
+    pthread_mutex_destroy(&attr);
     QNode_CtorZ(&dsp->n);
 
     QList_AppendNode(&dsp_list, &dsp->n);
@@ -510,11 +545,13 @@ void put_session(struct session *sess)
         return;
     }
 
+    LOG_INF("Releasing session reference");
     pthread_spin_lock(&sess->lock);
     if (sess->active_users > 0) {
         sess->active_users--;
     }
     pthread_spin_unlock(&sess->lock);
+    LOG_INF("Released session reference");
 }
 
 /* Initialize Session */
@@ -553,13 +590,6 @@ struct session *session_init(struct dsp *dsp, int session_id)
     sess->session_id = session_id;
     sess->active_users = 0;
     sess->dsp = dsp;
-    sess->config = config_store_create();
-    if (!sess->config) {
-        unlock_dsp(dsp);
-        free(sess);
-        LOG_SESS_INIT_ERR("Failed to create config store for session ID %d", session_id);
-        return NULL;
-    }
     QList_Ctor(&sess->maps);
 
     /* Initialize session lock */
@@ -660,7 +690,16 @@ int session_deinit(struct session *sess)
             return AEE_EFAILED;
         }
 
-        config_store_destroy(sess->config);
+        // Cleanup registered modules
+        pthread_mutex_lock(&handle_lock);
+        struct module *mod, *tmp;
+        HASH_ITER(hh, handles, mod, tmp) {
+            if (mod->sess == sess) {
+                HASH_DEL(handles, mod);
+                free(mod);
+            }
+        }
+        pthread_mutex_unlock(&handle_lock);
         // Cleanup session
         QNode_Dequeue(&sess->n);
         pthread_spin_destroy(&sess->lock);
@@ -674,6 +713,49 @@ int session_deinit(struct session *sess)
     unlock_dsp_list();
     LOG_SESS_DEINIT_ERR("Session ID %d not found in any DSP", session_id);
     return AEE_EINVALIDPARAM;
+}
+
+bool is_static_module_registered(remote_handle64 handle)
+{
+    struct static_module *entry = NULL;
+
+    pthread_mutex_lock(&static_modules_lock);
+    QNode *node;
+    QLIST_FOR_ALL(&static_modules, node) {
+        entry = STD_RECOVER_REC(struct static_module, n, node);
+        if (entry->handle == handle) {
+            break;
+        }
+    }
+    pthread_mutex_unlock(&static_modules_lock);
+
+    if (entry) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int register_static_module(const char *name, remote_handle64 handle) {
+    struct static_module *mod = NULL;
+
+    if (!name || handle == INVALID_HANDLE) {
+        LOG_ERR("Invalid module name or handle");
+        return AEE_EINVALIDPARAM;
+    }
+
+    mod = malloc(sizeof(*mod));
+    if (!mod) {
+        LOG_ERR("Failed to allocate memory for module %s", name);
+        return AEE_ENOMEM;
+    }
+
+    strncpy(mod->name, name, sizeof(mod->name) - 1);
+    mod->handle = handle;
+    pthread_mutex_lock(&static_modules_lock);
+    QList_AppendNode(&static_modules, &mod->n);
+    pthread_mutex_unlock(&static_modules_lock);
+    return AEE_SUCCESS;
 }
 
 /* Add Module to Session */
@@ -699,11 +781,11 @@ remote_handle64 session_add_module(struct session *sess, const char *name)
     strncpy(mod->name, name, sizeof(mod->name) - 1);
 
     if(HASH_COUNT(handles) <= 0) {
-        err = call_session_callbacks(dsp, CALLBACK_TYPE_OPEN, mod->name);
+        err = call_session_callbacks(dsp, CALLBACK_TYPE_OPEN, global_config);
         if (err) {
             LOG_ERR("Failed in open callback for session %d", sess->session_id);
             free(mod);
-            return AEE_EFAILED;
+            return INVALID_HANDLE;
         }
     }
 
@@ -712,7 +794,7 @@ remote_handle64 session_add_module(struct session *sess, const char *name)
     if (err) {
         LOG_ERR("Failed to load module %s", mod->name);
         free(mod);
-        return AEE_EFAILED;
+        return INVALID_HANDLE;
     }
 
     mod->handle = (remote_handle64)mod;
@@ -740,10 +822,15 @@ void session_remove_module(struct session *sess, remote_handle64 handle)
         return;
     }
 
+    if(handle == INVALID_HANDLE) {
+        LOG_ERR("Invalid handle");
+        return;
+    }
+
     dsp = sess->dsp;
 
     pthread_spin_lock(&handle_lock);
-    HASH_FIND_INT(handles, (void*)handle, mod);
+    HASH_FIND_INT(handles, &handle, mod);
     pthread_spin_unlock(&handle_lock);
 
     /* Call registered session callbacks for unload */
@@ -774,7 +861,7 @@ void session_remove_module(struct session *sess, remote_handle64 handle)
 }
 
 /* Configure Session */
-int session_configure(struct session *sess, char* config_key, void *config_value)
+int session_configure(struct session *sess, char* config_key, void *config_value, size_t size)
 {
     struct dsp *dsp = NULL;
 
@@ -795,14 +882,14 @@ int session_configure(struct session *sess, char* config_key, void *config_value
     dsp = sess->dsp;
 
     // Check return value from config_store_set
-    int err = config_store_set(sess->config, config_key, config_value);
+    int err = config_store_set(global_config, config_key, config_value, size);
     if (err != AEE_SUCCESS) {
         LOG_ERR("Failed to set config value for key %s", config_key);
         return err;
     }
 
     /* Call registered session callbacks for configure */
-    err = call_session_callbacks(dsp, CALLBACK_TYPE_CONFIGURE, sess->config);
+    err = call_session_callbacks(dsp, CALLBACK_TYPE_CONFIGURE, global_config);
     if (err) {
         LOG_ERR("Failed to configure session ID %d with config key %s", sess->session_id, config_key);
         return AEE_EFAILED;
@@ -828,6 +915,11 @@ int session_invoke(struct session *sess, remote_handle64 handle, uint32_t sc, re
         return AEE_EINVALIDPARAM;
     }
 
+    if(handle == INVALID_HANDLE) {
+        LOG_SESS_INV_ERR("Invalid handle for session ID %d", sess->session_id);
+        return AEE_EINVALIDPARAM;
+    }
+
     dsp = sess->dsp;
 
     if((err = convert_params(sess, sc, params, &args)) != AEE_SUCCESS) {
@@ -843,13 +935,13 @@ int session_invoke(struct session *sess, remote_handle64 handle, uint32_t sc, re
     /* Call registered session callbacks for invoke */
     err = call_session_callbacks(dsp, CALLBACK_TYPE_INVOKE, &invoke_args);
     if(err) {
-        LOG_SESS_INV_ERR("Failed to invoke session ID %d with handle %p and sc %u", 
-                 sess->session_id, (void *)handle, sc);
+        LOG_SESS_INV_ERR("Failed to invoke session ID %d with handle %x and sc %u", 
+                 sess->session_id, handle, sc);
         return AEE_EFAILED;
     }
 
     // Add your invocation logic here
-    LOG_SESS_INV_INF("Invoked session ID %d with handle %p and sc %u", sess->session_id, (void *)handle, sc);
+    LOG_SESS_INV_INF("Invoked session ID %d with handle %x and sc %u", sess->session_id, handle, sc);
     return AEE_SUCCESS;
 }
 

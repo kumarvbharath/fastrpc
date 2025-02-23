@@ -28,7 +28,7 @@ config_store_t *config_store_create() {
     if (store) {
         store->entries = NULL;
         pthread_mutex_init(&store->mutex, NULL);
-        LOG_INF("Config store created successfully");
+        LOG_INF("Config store %p created successfully", store);
     } else {
         LOG_ERR("Failed to allocate memory for config store");
     }
@@ -55,17 +55,17 @@ void config_store_destroy(config_store_t *store) {
     }
 }
 
-int config_store_set(config_store_t *store, const char *key, void *value) {
-    if(!store || !key || !value) {
+int config_store_set(config_store_t *store, const char *key, void *value, size_t size) {
+    if(!store || !key) {
         LOG_ERR("Invalid arguments");
         return AEE_EINVALIDPARAM;
     }
-    LOG_INF("Setting config value for key: %s", key);
+    LOG_INF("Store %p Setting config value for key: %s value: %p", store, key, value);
     pthread_mutex_lock(&store->mutex);
 
     config_entry_t *entry = NULL;
     HASH_FIND_STR(store->entries, key, entry);
-    if (entry == NULL) {
+    if (!entry) {
         entry = (config_entry_t *)malloc(sizeof(config_entry_t));
         if (entry == NULL) {
             LOG_ERR("Failed to allocate memory for new config entry");
@@ -74,21 +74,33 @@ int config_store_set(config_store_t *store, const char *key, void *value) {
         }
         strncpy(entry->key, key, sizeof(entry->key) - 1);
         entry->key[sizeof(entry->key) - 1] = '\0';
+        entry->value = calloc(1, size + 1);
+        if (entry->value == NULL) {
+            LOG_ERR("Failed to allocate memory for new config value");
+            free(entry);
+            pthread_mutex_unlock(&store->mutex);
+            return AEE_ENOMEM;
+        }
+        memmove(entry->value, value, size);
         HASH_ADD_STR(store->entries, key, entry);
-        LOG_INF("Created new config entry for key: %s", key);
-    } else {
-        LOG_INF("Updating existing config entry for key: %s", key);
+        LOG_INF("Created new config entry for key: %s, entry: %p value: %p [%d]", key, entry, entry->value, *(int*)(entry->value));
+    } else if (!value || size == 0) {
+        LOG_INF("Removing config entry for key: %s", key);
+        free(entry->key); // Free the old key if it was dynamically allocated
         free(entry->value); // Free the old value if it was dynamically allocated
+        free(entry);
+    } else {
+        LOG_INF("Updating config entry for key: %s", key);
     }
-    entry->value = value;
-
+    
     pthread_mutex_unlock(&store->mutex);
     LOG_INF("Successfully set config value for key: %s", key);
     return AEE_SUCCESS;
 }
 
 void *config_store_get(config_store_t *store, const char *key) {
-    LOG_INF("Getting config value for key: %s", key);
+    void *value;
+    LOG_INF("Getting config value for store %p key: %s", store, key);
 
     if(!store || !key) {
         LOG_ERR("Invalid arguments");
@@ -98,11 +110,10 @@ void *config_store_get(config_store_t *store, const char *key) {
 
     config_entry_t *entry = NULL;
     HASH_FIND_STR(store->entries, key, entry);
-    void *value = (entry != NULL) ? entry->value : NULL;
-
+    value = (entry != NULL) ? entry->value : NULL;
     pthread_mutex_unlock(&store->mutex);
     if (value) {
-        LOG_INF("Found config value for key: %s", key);
+        LOG_INF("Found config value for key: %s %p [%d]", key, value, *(int*)(value));
     } else {
         LOG_ERR("No config value found for key: %s", key);
     }

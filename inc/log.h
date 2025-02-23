@@ -11,7 +11,7 @@
 // Define global logging control
 #define ENABLE_ERR_LOGGING 1
 #define ENABLE_WRN_LOGGING 0
-#define ENABLE_INF_LOGGING 0
+#define ENABLE_INF_LOGGING 1
 
 // Define function-specific logging control
 #define LOG_DSP_INIT 1
@@ -42,9 +42,7 @@ static void print_backtrace() {
 
 // Define logging macros
 #if ENABLE_ERR_LOGGING
-    #define ERR(fmt, ...) do { \
-                                fprintf(stderr, "ERROR [Thread %lu] : " fmt "\n", pthread_self(), ##__VA_ARGS__); \
-                            } while (0)
+    #define ERR(fmt, ...) fprintf(stderr, "ERROR [%s][%s:%d][Thread %lu] : " fmt "\n", __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__);
     #define LOG_ERR ERR
 #else
     #define ERR(fmt, ...)
@@ -52,7 +50,7 @@ static void print_backtrace() {
 #endif
 
 #if ENABLE_WRN_LOGGING
-    #define WRN(fmt, ...) fprintf(stdout, "WARNING [Thread %lu] : " fmt "\n", pthread_self(), ##__VA_ARGS__)
+    #define WRN(fmt, ...) fprintf(stdout, "WARNING [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
     #define LOG_WRN WRN
 #else
     #define WRN(fmt, ...)
@@ -60,7 +58,7 @@ static void print_backtrace() {
 #endif
 
 #if ENABLE_INF_LOGGING
-    #define INF(fmt, ...) fprintf(stdout, "INFO [Thread %lu] : " fmt "\n", pthread_self(), ##__VA_ARGS__)
+    #define INF(fmt, ...) fprintf(stdout, "INFO [%s][%s:%d][Thread %lu] : " fmt "\n",  __func__, __FILE__, __LINE__, pthread_self(), ##__VA_ARGS__)
     #define LOG_INF INF
 #else
     #define INF(fmt, ...)

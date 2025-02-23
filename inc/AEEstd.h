@@ -9,4 +9,6 @@
 #define STD_RECOVER_REC(type,member,p) ((void)((p)-&(((type*)1)->member)),\
                                         (type*)(void*)(((char*)(void*)(p))-STD_OFFSETOF(type,member)))
 
+#define ALIGN(p, a)	      (((p) + ((a) - 1)) & ~((a) - 1))
+
 #endif /* __AEESTD_H__ */
