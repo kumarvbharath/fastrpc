@@ -63,13 +63,18 @@ $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c
 test_%: $(OBJ_FILES) $(OBJ_DIR)/test_%.o
 	$(CC) -o $@ $^ $(LDFLAGS)
 	@echo "Running $@..."
-	@mkdir -p $(COV_DIR)/$*
 	./$@ || (echo "Test $@ failed"; exit 1)
-	@gcov -o $(OBJ_DIR) $(SRC_FILES) > $(COV_DIR)/coverage.txt
 
 # Test target
 test: $(TEST_BINS)
 	@echo "All tests completed successfully"
+	@mkdir -p $(COV_DIR)
+	@for file in $(OBJ_FILES); do \
+		folder=$$(dirname $$file | sed 's|obj/||'); \
+		filename=$$(basename $$file .o); \
+		src_file=$$(echo $$file | sed 's|obj|src|' | sed 's|.o|.c|'); \
+    	gcov -f -o $$file $$src_file > $(COV_DIR)/$${folder}_$${filename}_coverage.txt; \
+	done
 
 # Coverage targets
 coverage:
