@@ -361,6 +361,71 @@ int test_multithreading_session_map_memory() {
     return 0;
 }
 
+void *thread_func_global_configure(void *arg) {
+    int result = global_configure("key", "value", 5);
+    ASSERT_EQUAL(result, AEE_SUCCESS);
+    return NULL;
+}
+
+void *thread_func_session_configure(void *arg) {
+    struct session *sess = (struct session *)arg;
+    int result = session_configure(sess, "key", "value", 5);
+    ASSERT_EQUAL(result, AEE_SUCCESS);
+    return NULL;
+}
+
+int test_session_configure_invalid() {
+    struct session *sess = NULL;
+    int result = session_configure(sess, "key", "value", 5);
+    ASSERT_EQUAL(result, AEE_EINVALIDPARAM);
+    return 0;
+}
+
+int test_global_configure() {
+    int result = global_configure("key", "value", 5);
+    ASSERT_EQUAL(result, AEE_SUCCESS);
+    return 0;
+}
+
+int test_global_configure_invalid() {
+    int result = global_configure(NULL, "value", 5);
+    ASSERT_EQUAL(result, AEE_EINVALIDPARAM);
+    return 0;
+}
+
+int test_multithreading_global_configure() {
+    pthread_t thread1, thread2;
+
+    pthread_create(&thread1, NULL, thread_func_global_configure, NULL);
+    pthread_create(&thread2, NULL, thread_func_global_configure, NULL);
+
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+    return 0;
+}
+
+int test_multithreading_session_configure() {
+    register_dsp_callback(CALLBACK_TYPE_INIT, test_callback);
+    struct dsp *dsp = dsp_init(1);
+    register_session_callback(dsp, CALLBACK_TYPE_INIT | CALLBACK_TYPE_MAP | CALLBACK_TYPE_UNMAP | CALLBACK_TYPE_CONFIGURE, test_callback);
+    struct session *sess = session_init(dsp, 1);
+
+    pthread_t thread1, thread2;
+
+    pthread_create(&thread1, NULL, thread_func_session_configure, (void *)sess);
+    pthread_create(&thread2, NULL, thread_func_session_configure, (void *)sess);
+
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+    session_deinit(sess);
+    unregister_session_callback(dsp, CALLBACK_TYPE_INIT | CALLBACK_TYPE_MAP | CALLBACK_TYPE_UNMAP | CALLBACK_TYPE_CONFIGURE, test_callback);
+    dsp_deinit(1);
+    unregister_dsp_callback(CALLBACK_TYPE_INIT, test_callback);
+    return 0;
+}
+
 int main() {
     fastrpc_core_init();
     RUN_TEST(test_register_unregister_dsp_callback);
@@ -387,6 +452,11 @@ int main() {
     RUN_TEST(test_session_remove_module_invalid);
     RUN_TEST(test_multithreading_session_invoke);
     RUN_TEST(test_multithreading_session_map_memory);
+    RUN_TEST(test_session_configure_invalid);
+    RUN_TEST(test_global_configure);
+    RUN_TEST(test_global_configure_invalid);
+    RUN_TEST(test_multithreading_global_configure);
+    RUN_TEST(test_multithreading_session_configure);
 
     return 0;
 }

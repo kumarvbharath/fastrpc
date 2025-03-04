@@ -15,6 +15,7 @@
 #include "error.h"
 #include "log.h"
 #include "rpcmem.h"
+#include "config.h"
 #include "remote.h"
 #include "uthash.h"
 
@@ -127,6 +128,8 @@ struct invoke_params {
 
 //Initialization function for all fastRPC DSP, Session and Module
 void fastrpc_core_init(void);
+
+int global_configure(const char *key, const char *value, size_t size);
 
 /**
  * @brief Get a session object from a module handle

@@ -49,6 +49,8 @@ static struct module *handles = NULL; // Handle hash table
 /* Initialization control */
 static pthread_once_t fastrpc_init_once = PTHREAD_ONCE_INIT;
 
+/* Configuration store for all session configs */
+static config_store_t *global_config = NULL;
 
 /* Helper function to lock and unlock dsp_list_lock */
 static void lock_dsp_list() {
@@ -355,12 +357,23 @@ static void fastrpc_core_init_impl(void)
     pthread_spin_init(&handle_lock, PTHREAD_PROCESS_PRIVATE);
     pthread_mutex_init(&dsp_callbacks_lock, &attr);
 
+    global_config = config_store_create();
+
     pthread_mutexattr_destroy(&attr);
 }
 
 void fastrpc_core_init(void)
 {
     pthread_once(&fastrpc_init_once, fastrpc_core_init_impl);
+}
+
+int global_configure(const char *key, const char *value, size_t size)
+{
+    if (!global_config) {
+        LOG_ERR("Global config store not initialized");
+        return AEE_EFAILED;
+    }
+    return config_store_set(global_config, key, value, size);
 }
 
 /* Initialize DSP */
@@ -720,7 +733,7 @@ remote_handle64 session_add_module(struct session *sess, const char *name)
     strncpy(mod->name, name, sizeof(mod->name) - 1);
 
     if(HASH_COUNT(handles) <= 0) {
-        err = call_session_callbacks(dsp, CALLBACK_TYPE_OPEN, NULL, NULL);
+        err = call_session_callbacks(dsp, CALLBACK_TYPE_OPEN, global_config, NULL);
         if (err) {
             LOG_SESS_ADDMOD_ERR("Failed in open callback for session %d", sess->session_id);
             FREE(mod);
@@ -827,10 +840,15 @@ int session_configure(struct session *sess, char* key, void *value, size_t size)
 
     dsp = sess->dsp;
 
-    //TODO: add configstore to store key and value pairs
+    // Check return value from config_store_set
+    err = config_store_set(global_config, key, value, size);
+    if (err != AEE_SUCCESS) {
+        LOG_ERR("Failed to set config value for key %s", key);
+        return err;
+    }
 
     /* Call registered session callbacks for configure */
-    err = call_session_callbacks(dsp, CALLBACK_TYPE_CONFIGURE, NULL, NULL);
+    err = call_session_callbacks(dsp, CALLBACK_TYPE_CONFIGURE, global_config, NULL);
     if (err) {
         LOG_SESS_CFG_ERR("Failed to configure session ID %d with config key %s", sess->session_id, key);
         return AEE_EFAILED;

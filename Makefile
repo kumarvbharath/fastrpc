@@ -27,7 +27,7 @@ OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 TEST_OBJ = $(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_SRC))
 
 # Test targets
-TEST_BINS = test_fastrpc test_rpcmem
+TEST_BINS = test_fastrpc test_rpcmem test_config
 
 # Library target
 LIB_TARGET = $(LIB_DIR)/libdsprpc.so
