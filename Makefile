@@ -16,18 +16,20 @@ LIB_DIR = lib
 COV_DIR = coverage
 
 # Source organization
-FASTRPC_SRC = $(wildcard $(SRC_DIR)/*.c)
+BASE_SRC = $(wildcard $(SRC_DIR)/*.c)
+CORE_SRC = $(wildcard $(SRC_DIR)/core/*.c)
+REMOTE_SRC = $(wildcard $(SRC_DIR)/remote/*.c)
 TEST_SRC = $(wildcard $(TEST_DIR)/test_*.c)
 
 # All source files
-SRC_FILES = $(FASTRPC_SRC)
+SRC_FILES = $(BASE_SRC) $(CORE_SRC) $(REMOTE_SRC)
 
 # Object files
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC_FILES))
 TEST_OBJ = $(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_SRC))
 
 # Test targets
-TEST_BINS = test_fastrpc test_rpcmem test_config
+TEST_BINS = test_fastrpc test_rpcmem test_config test_remote
 
 # Library target
 LIB_TARGET = $(LIB_DIR)/libdsprpc.so
