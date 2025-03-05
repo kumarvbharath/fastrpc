@@ -59,6 +59,7 @@ void fastrpc_other_init(void) {
 
     register_dsp_callback(CALLBACK_TYPE_INIT | CALLBACK_TYPE_DEINIT, rpcmem_dsp_callback);
     register_dsp_callback(CALLBACK_TYPE_INIT | CALLBACK_TYPE_DEINIT, remote_dsp_callback);
+    register_dsp_callback(CALLBACK_TYPE_INIT | CALLBACK_TYPE_DEINIT, remotectl_dsp_callback);
     
     LOG_INF("FastRPC components initialized successfully");
 }
@@ -105,6 +106,7 @@ int fastrpc_deinit(void) {
     }
 
     // Unregister callbacks in reverse order
+    unregister_dsp_callback(CALLBACK_TYPE_DEINIT | CALLBACK_TYPE_INIT, remotectl_dsp_callback);
     unregister_dsp_callback(CALLBACK_TYPE_DEINIT | CALLBACK_TYPE_INIT, remote_dsp_callback);
     unregister_dsp_callback(CALLBACK_TYPE_DEINIT | CALLBACK_TYPE_INIT, rpcmem_dsp_callback);
 
