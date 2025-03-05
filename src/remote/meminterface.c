@@ -36,13 +36,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "AEEQList.h"
+#include "memory.h"
 #include "remote.h"
 #include "fastrpc.h"
 #include "rpcmem.h"
 #include "log.h"
 
 struct rpcmem* create_rpcmem(void *addr, size_t length, int fd, int offset, enum fastrpc_map_flags flags) {
-    struct rpcmem *mem = malloc(sizeof(struct rpcmem));
+    struct rpcmem *mem = MALLOC(sizeof(struct rpcmem));
     if (!mem) {
         LOG_ERR("Failed to allocate memory for rpcmem");
         return NULL;
@@ -59,7 +60,7 @@ struct rpcmem* create_rpcmem(void *addr, size_t length, int fd, int offset, enum
 
 void destroy_rpcmem(struct rpcmem *mem) {
     if (mem) {
-        free(mem);
+        FREE(mem);
     }
 }
 
